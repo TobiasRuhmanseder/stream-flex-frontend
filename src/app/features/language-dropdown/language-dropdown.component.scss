@@ -1,0 +1,90 @@
+.language-dropdown {
+    position: relative;
+    font-size: 0.875rem;
+    width: 9.375rem;
+    color: #fff;
+
+    .selected-language {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.375rem 1rem;
+        border: 0.0625rem solid #fff;
+        border-radius: 1.25rem;
+        background-color: rgba(0, 0, 0, 0.5);
+        cursor: pointer;
+        user-select: none;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .language-icon {
+            font-size: 1.125rem;
+        }
+
+        .dropdown-arrow {
+            font-size: 0.5rem;
+            transition: transform 0.3s ease;
+
+            &.open {
+                transform: rotate(180deg);
+            }
+        }
+
+        .space-arrow-container {
+            display: flex;
+            justify-content: space-between;
+            width: 5rem;
+        }
+    }
+
+    .language-options {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        margin-top: 0.5rem;
+        padding: 0;
+        list-style: none;
+        border: 0.0625rem solid #333;
+        border-radius: 0.625rem;
+        background-color: #333;
+        box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.5);
+        width: 100%;
+        transform: translateY(-0.625rem);
+        transition: opacity 0.3s ease, visibility 0s 0.3s, transform 0.3s ease;
+
+        &.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            transition: opacity 0.3s ease, visibility 0s 0s, transform 0.3s ease;
+        }
+
+        li {
+            padding: 0.625rem 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.3s ease;
+
+            &:hover {
+                background-color: #444;
+            }
+
+            &.selected {
+                font-weight: bold;
+            }
+
+            span {
+                font-size: 1rem;
+            }
+        }
+    }
+}
+
+.check-placeholder {
+    opacity: 0;
+}

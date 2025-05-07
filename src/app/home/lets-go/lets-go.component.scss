@@ -1,0 +1,31 @@
+.greeting {
+    padding-bottom: 10rem;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
+    span {
+        margin-top: 1rem;
+        font-size: 1.125rem;
+        font-weight: 700;
+    }
+}
+
+.bttn-start {
+    width: 13rem;
+    height: 3.7rem;
+    font-size: 1.5rem;
+    margin-left: 0.5rem;
+}
+
+.start-arrow {
+    padding-top: 3px;
+    margin-left: 12px;
+}
+
+.input-section {
+    width: 35rem;
+    display: flex;
+    align-items: center;
+
+}

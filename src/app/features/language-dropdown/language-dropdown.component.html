@@ -1,0 +1,31 @@
+<div class="language-dropdown">
+    <!-- Display the selected language and toggle the dropdown -->
+    <div class="selected-language" (click)="toggleDropdown()">
+        <img class="language-icon" src="../../../assets/icons/language.svg" alt="language icon">
+        <div class="space-arrow-container">
+            <span>{{ selectedLanguage.label }}</span>
+            <img class="dropdown-arrow" src="../../../assets/icons/arrow_dropdown_down.svg" [class.open]="isOpen"
+                alt="dropdown arrow">
+        </div>
+
+    </div>
+
+    <!-- Dropdown menu appears when isOpen is true -->
+    @if (isOpen) {
+    <ul class="language-options">
+        <!-- Iterate over the languages array and display each language -->
+        @for (language of languages; track language.code) {
+        <li (click)="selectLanguage(language)" [class.selected]="language.code === selectedLanguage.code">
+            <!-- Display a checkmark if the language is selected -->
+            @if (language.code === selectedLanguage.code) {
+            <img class="language-icon" src="../../../assets/icons/check.svg" alt="language icon">
+            }
+            @else {
+            <img class="language-icon check-placeholder" src="../../../assets/icons/check.svg" alt="language icon">
+            }
+            {{ language.label }}
+        </li>
+        }
+    </ul>
+    }
+</div>

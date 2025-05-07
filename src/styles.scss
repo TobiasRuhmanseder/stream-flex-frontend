@@ -1,0 +1,60 @@
+body {
+    margin: 0;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html {
+    font-size: 100%;
+}
+
+h1 {
+    font-size: 3.5rem;
+    margin: 0;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+.d-none{
+    display: none;
+}
+
+.d-flex{
+    display: flex;
+}
+
+.align-center{
+    align-items: center;
+}
+
+.justify-center{
+    justify-content: center;
+}
+
+.bttn-red {
+    text-decoration: none;
+    border: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: rgb(229, 9, 20);
+    color: white;
+    font-weight: 700;
+    transition: all 125ms ease-in-out;
+
+    &:hover {
+        background-color: rgb(158, 21, 28);
+        transition: all 225ms ease-in-out;
+    }
+}
+
+.sign-dialog {
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+}

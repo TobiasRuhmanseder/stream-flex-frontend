@@ -1,0 +1,19 @@
+<div class="greeting">
+    <h1>Unbegrenzt Filme, Serien und mehr</h1>
+    <h2>Genießen Sie Stream Flex, wo immer Sie möchten. Jederzeit!</h2>
+    <span>Startklar? Geben Sie Ihre E-Mail Adresse ein, um Ihre kostenlose Mitgliedschaft zu beginnen!</span>
+    <div class="d-flex align-center justify-center">
+        <div class="input-section">
+            <app-sign-input [control]="emailControl" label="E-Mail-Adresse" type="email" [errorMessages]="{
+                    required: 'Dieses Feld ist erforderlich.',
+                    email: 'Bitte geben Sie eine gültige E-Mail-Adresse ein.'
+                  }">
+            </app-sign-input>
+        </div>
+        <button (click)="letsGo()" class="bttn-red bttn-start" type="button">Loslegen
+            <div class="start-arrow">
+                <img src="assets/icons/arror_forward_start.svg" alt="">
+            </div>
+        </button>
+    </div>
+</div>

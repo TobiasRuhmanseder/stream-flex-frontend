@@ -1,0 +1,15 @@
+<div class="home">
+    <header>
+        <div class="header-menu">
+            <img src="../../assets/img/FlexmitteWeiß.png" alt="">
+            <div class="login-language-section">
+                <app-language-dropdown class="header-language-dropdown"></app-language-dropdown>
+                <button class="bttn-red bttn-header" routerLink="sign-in" routerLinkActive="d-none">Einloggen</button>
+            </div>
+
+        </div>
+    </header>
+    <main [@fadeAnimation]="getRouteAnimationData()">
+        <router-outlet></router-outlet>
+    </main>
+</div>

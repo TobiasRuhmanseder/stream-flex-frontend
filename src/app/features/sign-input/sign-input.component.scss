@@ -1,0 +1,53 @@
+:host {
+    width: 100%;
+}
+
+.input-container {
+    width: 100%;
+    position: relative;
+    margin: 2rem 0;
+
+    input {
+        width: 100%;
+        padding-top: 2rem;
+        padding-bottom: 0.5rem;
+        padding-left: 1rem;
+        font-size: 1rem;
+        border: 1px solid #5d5d5d;
+        border-radius: 4px;
+        box-sizing: border-box;
+        background-color: rgba(0, 0, 0, 0.6);
+        color: white;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    label {
+        position: absolute;
+        top: 1.25rem;
+        left: 1rem;
+        font-size: 1rem;
+        color: #aaa;
+        pointer-events: none;
+        transition: all 0.2s ease-in-out;
+
+        &.active {
+            top: 0.5rem;
+            left: 0.7rem;
+            font-size: 0.75rem;
+            padding: 0 0.25rem;
+        }
+    }
+
+    &.invalid input {
+        border-color: red;
+    }
+}
+
+.error-message {
+    color: red;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+}

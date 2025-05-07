@@ -1,0 +1,39 @@
+<div class="sign-dialog sign-in">
+    <div class="sign-in-dialog">
+        <h2>Einloggen</h2>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div>
+
+                <app-sign-input [control]="identifierControl" label="E-Mail oder Telefonnummer" type="email"
+                    [errorMessages]="{
+                    required: 'Dieses Feld ist erforderlich.',
+                    invalidIdentifier: 'Bitte geben Sie eine gültige E-Mail-Adresse oder Mobilnummer ein.'
+                  }">
+                </app-sign-input>
+            </div>
+
+            <div>
+                <label for="password">Passwort</label>
+                <input id="password" formControlName="password" type="password">
+                @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+                <div>
+                    @if (loginForm.get('password')?.errors?.['required']) {
+                    <small>Dieses Feld ist erforderlich.</small>
+                    }
+                    @if (loginForm.get('password')?.errors?.['minlength']) {
+                    <small>Das Passwort muss mindestens 4
+                        Zeichen lang sein.</small>
+                    }
+                    @if (loginForm.get('password')?.errors?.['maxlength']) {
+                    <small>Das Passwort darf maximal 60 Zeichen
+                        lang sein.</small>
+                    }
+                </div>
+                }
+            </div>
+
+            <button type="submit" [disabled]="loginForm.invalid">Anmelden</button>
+        </form>
+    </div>
+
+</div>
