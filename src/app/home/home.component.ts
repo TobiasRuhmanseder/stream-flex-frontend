@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LanguageDropdownComponent } from '../features/language-dropdown/language-dropdown.component';
-import { LetsGoComponent } from './lets-go/lets-go.component';
-import { SignInComponent } from "./sign-in/sign-in.component";
 import { RouterOutlet, RouterLink, RouterModule, ActivatedRoute } from '@angular/router';
-import { trigger, transition, style, animate, query, group } from '@angular/animations';
+import { trigger, transition, style, animate} from '@angular/animations';
 
 
 @Component({

@@ -4,11 +4,11 @@ import { ReactiveFormsModule, FormControl, AbstractControl } from '@angular/form
 import { Subscription } from 'rxjs';
 
 @Component({
-    selector: 'app-sign-input',
-    standalone: true,
-    imports: [CommonModule, ReactiveFormsModule],
-    templateUrl: './sign-input.component.html',
-    styleUrl: './sign-input.component.scss'
+  selector: 'app-sign-input',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './sign-input.component.html',
+  styleUrl: './sign-input.component.scss'
 })
 export class SignInputComponent implements OnInit, OnDestroy {
   @Input() control!: FormControl;
@@ -44,12 +44,10 @@ export class SignInputComponent implements OnInit, OnDestroy {
   }
 
   get errorMessage(): string | null {
-    if (this.control.invalid && (this.control.touched || this.control.dirty)) {
-      const firstErrorKey = Object.keys(this.control.errors || {})[0];
-      console.log(this.control.errors);
-      console.log(firstErrorKey);
-      console.log(this.errorMessages[firstErrorKey]);
-
+    if (
+      (this.control.invalid && this.control.touched)
+    ) {
+      const firstErrorKey = Object.keys(this.control.errors ?? {})[0];
       return this.errorMessages[firstErrorKey] || 'Ungültige Eingabe.';
     }
     return null;

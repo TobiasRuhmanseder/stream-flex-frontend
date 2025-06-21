@@ -1,0 +1,15 @@
+.toastbar {
+    position: absolute;
+    bottom: 4rem;
+    left: 50%;
+    background: #000000;
+    color: rgb(255, 255, 255);
+    padding: 1.5rem 2rem;
+    border-radius: 6px;
+    box-shadow: 0px 0px 40px 0px rgba(255, 255, 255, 0.5);
+    z-index: 1000;
+}
+
+.toastbar.error {
+    background: rgb(229, 9, 20);
+}

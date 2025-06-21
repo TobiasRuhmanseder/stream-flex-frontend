@@ -1,11 +1,11 @@
-<div class="input-container" [ngClass]="{ 'invalid': control.invalid && (control.dirty || control.touched) }">
+<div class="input-container"
+    [ngClass]="{ 'invalid': this.control.invalid && this.control.touched }">
     <input [type]="type" [formControl]="control" (focus)="onFocus()" (blur)="onBlur()"
         [ngClass]="{ 'not-empty': hasValue }" />
     <label [class.active]="isFocused || hasValue">{{ label }}</label>
+    @if(errorMessages){
+    <div class="error-message">
+        <small>{{ errorMessage }}</small>
+    </div>
+    }
 </div>
-<!-- invalid error message -->
-@if(errorMessages){
-<div class="error-message">
-    <small>{{ errorMessage }}</small>
-</div>
-}
