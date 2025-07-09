@@ -1,11 +1,18 @@
 import { Injectable } from '@angular/core';
+import { SignUpData } from '../models/user.interfaces';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor() { }
+  private base = environment.apiBaseUrl;         // z.B. 'http://localhost:8000/api'
+  private signUpUrl = `${this.base}/users/signup/`;
+
+  constructor(private http: HttpClient) { }
 
   firstRequestForAlwaysLoggedIn(): Promise<void> {
     return new Promise((resolve) => {
@@ -16,5 +23,9 @@ export class AuthService {
         resolve();
       }, 1000); // Simulating a delay of 1 second
     });
+  }
+
+  signUp(data: SignUpData): Observable<void> {
+    return this.http.post<void>(this.signUpUrl, data)
   }
 }

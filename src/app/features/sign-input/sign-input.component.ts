@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { ReactiveFormsModule, FormControl, AbstractControl } from '@angular/forms';
+import { ReactiveFormsModule, FormControl} from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 @Component({

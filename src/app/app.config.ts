@@ -3,6 +3,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { AuthService } from './services/auth.service';
+import { provideHttpClient } from '@angular/common/http';
 
 function initializeApp(): void | Promise<void> {
   const auth = inject(AuthService);
@@ -15,6 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(initializeApp),
     provideRouter(routes),
     provideAnimations(),
-    provideExperimentalZonelessChangeDetection()
+    provideExperimentalZonelessChangeDetection(),
+    provideHttpClient(),
   ]
 };
