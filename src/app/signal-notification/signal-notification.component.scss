@@ -3,7 +3,7 @@
     bottom: 4rem;
     left: 50%;
     background: #000000;
-    color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
     padding: 1.5rem 2rem;
     border-radius: 6px;
     box-shadow: 0px 0px 40px 0px rgba(255, 255, 255, 0.5);
@@ -12,4 +12,14 @@
 
 .toastbar.error {
     background: rgb(229, 9, 20);
+    color: rgb(255, 255, 255);
+}
+
+.toastbar.info{
+    background: rgb(226, 222, 11);
+}
+
+.toastbar.success{
+    background: rgb(248, 248, 248);
+
 }

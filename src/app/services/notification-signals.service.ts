@@ -1,19 +1,17 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
+import { GlobalNotification } from '../models/global-notification.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationSignalsService {
-message = signal<string | null>(null);
-isError = signal<boolean>(false);
+  globalNotification = signal<GlobalNotification | null>(null);
 
-show(message: string, isError = false) {
-  this.message.set(message);
-  this.isError.set(isError);
-}
+  show(globalNotification: GlobalNotification) {
+    this.globalNotification.set(globalNotification);
+  }
 
-clear(){
-  this.message.set(null);
-  this.isError.set(false);
-}
+  clear() {
+    this.globalNotification.set(null);
+  }
 }

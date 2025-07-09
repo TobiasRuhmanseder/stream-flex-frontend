@@ -1,5 +1,5 @@
-@if (show()) {
-<div @fadeInOut class="toastbar" [class.error]="isError()">
-    {{ message() }}
+@if (globalNotification(); as notif) {
+<div @fadeInOut class="toastbar" [ngClass]="notif.type">
+    {{ notif.message }}
 </div>
 }

@@ -6,6 +6,7 @@ import { SharedService } from 'src/app/services/shared.service';
 
 import { NotificationSignalsService } from 'src/app/services/notification-signals.service';
 import { cloneUniformsGroups } from 'three/src/renderers/shaders/UniformsUtils';
+import { GlobalNotification } from 'src/app/models/global-notification.interface';
 
 @Component({
   selector: 'app-lets-go',
@@ -21,6 +22,7 @@ export class LetsGoComponent {
   });
 
   notificationTest = inject(NotificationSignalsService);
+  globalNotification: GlobalNotification = { type: 'info', message: ' Toastmessage ' };
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private sharedService: SharedService) {
   }
@@ -37,6 +39,6 @@ export class LetsGoComponent {
   }
 
   notificationTestFunction() {
-    this.notificationTest.show("An error has occurred.", true);
+    this.notificationTest.show(this.globalNotification);
   }
 }
