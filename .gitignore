@@ -40,3 +40,9 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# ignore all environment files
+/src/environments/*.ts
+
+# but keep the template
+!/src/environments/environment.template.ts
