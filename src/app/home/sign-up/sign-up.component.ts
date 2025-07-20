@@ -19,14 +19,13 @@ export class SignUpComponent implements OnInit {
     this.signupForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(60), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/)]],
-      rememberMe: [false]
     })
-    this.signupForm.controls['email'].setValue(this.checkExistingEmail());
+    this.signupForm.controls['email'].setValue(this.checkExistingEmail()); 
   }
 
   // Getter for identifier as FormControl
   get emailControl(): FormControl {
-    return this.signupForm.get('identifier') as FormControl;
+    return this.signupForm.get('email') as FormControl;
   }
 
   // Getter for password as FormControl
@@ -40,7 +39,7 @@ export class SignUpComponent implements OnInit {
     }
   }
 
-  // check if a email adress was put into the get start input field on the landing page - übernehmen
+  // check if a email adress was put into the get start input field on the let's go component
   checkExistingEmail(): string {
     let email: string = this.sharedService.getIdentifier();
     if (email != '') return email;

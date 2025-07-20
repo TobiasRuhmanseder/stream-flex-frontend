@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SignUpData } from '../models/user.interfaces';
+import { CheckEmailDto, CheckEmailResponse, SignUpData } from '../models/user.interfaces';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -11,6 +11,7 @@ export class AuthService {
 
   private base = environment.apiBaseUrl;         // z.B. 'http://localhost:8000/api'
   private signUpUrl = `${this.base}/users/signup/`;
+  private emailExistUrl = `${this.base}/users/check-email/`;
 
   constructor(private http: HttpClient) { }
 
@@ -28,4 +29,9 @@ export class AuthService {
   signUp(data: SignUpData): Observable<void> {
     return this.http.post<void>(this.signUpUrl, data)
   }
+
+  checkEmailExist(dto: CheckEmailDto): Observable<CheckEmailResponse> {
+    return this.http.post<CheckEmailResponse>(this.emailExistUrl, dto)
+  }
+
 }

@@ -1,6 +1,6 @@
 export const environment = {
     production: false,
     recaptchaEnabled: false,
-    recaptchaSiteKey: 'DEIN_SITE_KEY',
+    recaptchaSiteKey: '',
     apiBaseUrl: 'API_BASE_URL',
 };

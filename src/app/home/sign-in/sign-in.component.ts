@@ -28,7 +28,7 @@ export class SignInComponent implements OnInit {
 
   // Getter for email as FormControl
   get emailControl(): FormControl {
-    return this.loginForm.get('identifier') as FormControl;
+    return this.loginForm.get('email') as FormControl;
   }
 
   // Getter for password as FormControl

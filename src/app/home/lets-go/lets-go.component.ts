@@ -30,15 +30,20 @@ export class LetsGoComponent {
   letsGo() {
 
     this.emailControl.markAsTouched();// Mark the control as touched to trigger validation messages
-
     if (this.emailControl.valid) {
-      //Backend request if email or adress exist 
       this.sharedService.setIdentifier(this.emailControl.value)
-      this.router.navigate(['sign-in'], { relativeTo: this.activatedRoute.parent });
+      if (this.checkEmailExists())
+        this.router.navigate(['sign-in'], { relativeTo: this.activatedRoute.parent });
+      else this.router.navigate(['sign-up'], { relativeTo: this.activatedRoute.parent });
     }
   }
 
   notificationTestFunction() {
     this.notificationTest.show(this.globalNotification);
+  }
+
+  checkEmailExists() {
+
+    return false
   }
 }
