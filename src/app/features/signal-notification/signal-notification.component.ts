@@ -1,6 +1,6 @@
 import { Component, computed, effect, inject, } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { NotificationSignalsService } from '../services/notification-signals.service';
+import { NotificationSignalsService } from 'src/app/services/notification-signals.service';
 import { CommonModule } from '@angular/common';
 
 
@@ -12,11 +12,11 @@ import { CommonModule } from '@angular/common';
   animations: [
     trigger('fadeInOut', [
       transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(20px)' }),
-        animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' })),
+        style({ opacity: 0, transform: 'translate(-50%, 20px)' }),
+        animate('300ms ease-out', style({ opacity: 1, transform: 'translate(-50%, 0)' })),
       ]),
       transition(':leave', [
-        animate('300ms ease-in', style({ opacity: 0, transform: 'translateY(20px)' })),
+        animate('300ms ease-in', style({ opacity: 0, transform: 'translate(-50%, 20px)' })),
       ]),
     ]),
   ],
@@ -27,13 +27,10 @@ export class SignalNotificationComponent {
   globalNotification = this.notificationService.globalNotification;
 
   constructor() {
-    console.log(this.globalNotification);
-
     effect(() => {
       if (this.globalNotification()) {
         setTimeout(() => this.notificationService.clear(), 2000)
       }
     })
   }
-
 }

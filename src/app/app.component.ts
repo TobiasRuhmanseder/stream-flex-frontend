@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { SignalNotificationComponent } from './signal-notification/signal-notification.component';
+import { SignalNotificationComponent } from './features/signal-notification/signal-notification.component';
 
 @Component({
   selector: 'app-root',

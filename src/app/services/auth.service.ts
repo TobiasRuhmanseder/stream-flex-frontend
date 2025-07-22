@@ -11,7 +11,7 @@ export class AuthService {
 
   private base = environment.apiBaseUrl;         // z.B. 'http://localhost:8000/api'
   private signUpUrl = `${this.base}/users/signup/`;
-  private emailExistUrl = `${this.base}/users/check-email/`;
+  private emailExistUrl = `${this.base}/users/check-email/?email=`;
 
   constructor(private http: HttpClient) { }
 
@@ -31,7 +31,8 @@ export class AuthService {
   }
 
   checkEmailExist(dto: CheckEmailDto): Observable<CheckEmailResponse> {
-    return this.http.post<CheckEmailResponse>(this.emailExistUrl, dto)
+    const url = this.emailExistUrl + dto.email
+    return this.http.get<CheckEmailResponse>(url)
   }
 
 }
