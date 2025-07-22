@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, FormControl } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { SignInputComponent } from 'src/app/features/sign-input/sign-input.component';
-import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -12,7 +12,7 @@ import { SharedService } from 'src/app/services/shared.service';
 export class SignUpComponent implements OnInit {
   signupForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private sharedService: SharedService) {
+  constructor(private fb: FormBuilder, private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -20,7 +20,7 @@ export class SignUpComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(60), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/)]],
     })
-    this.signupForm.controls['email'].setValue(this.checkExistingEmail()); 
+    this.signupForm.controls['email'].setValue(this.  getEmailFromLetsGoInput()); 
   }
 
   // Getter for identifier as FormControl
@@ -39,11 +39,9 @@ export class SignUpComponent implements OnInit {
     }
   }
 
-  // check if a email adress was put into the get start input field on the let's go component
-  checkExistingEmail(): string {
-    let email: string = this.sharedService.getIdentifier();
-    if (email != '') return email;
-    else return ''
+  getEmailFromLetsGoInput(): string {
+    const paramEmail = this.route.snapshot.queryParamMap.get('email') || '';
+    return paramEmail
   }
 }
 

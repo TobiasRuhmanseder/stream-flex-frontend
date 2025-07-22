@@ -1,10 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormsModule, Validators } from '@angular/forms';
 import { SignInputComponent } from 'src/app/features/sign-input/sign-input.component';
 import { Router, ActivatedRoute } from '@angular/router';
-import { SharedService } from 'src/app/services/shared.service';
 import { NotificationSignalsService } from 'src/app/services/notification-signals.service';
-import { GlobalNotification } from 'src/app/models/global-notification.interface';
 import { RecaptchaService } from 'src/app/services/recaptcha.service';
 import { switchMap } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';

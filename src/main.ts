@@ -12,7 +12,7 @@ else console.log('dev - mode enable - look at the main.ts and environment.ts fil
 
 if (environment.recaptchaEnabled) {
   const script = document.createElement('script');
-  script.src = `https://www.google.com/recaptch/api.js?render=${environment.recaptchaSiteKey}`;
+  script.src = `https://www.google.com/recaptcha/api.js?render=${environment.recaptchaSiteKey}`;
   script.async = true;
   script.defer = true;
   script.onerror = () => {

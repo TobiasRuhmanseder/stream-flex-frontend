@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LanguageDropdownComponent } from '../features/language-dropdown/language-dropdown.component';
 import { RouterOutlet, RouterLink, RouterModule, ActivatedRoute } from '@angular/router';
-import { trigger, transition, style, animate} from '@angular/animations';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 
 @Component({
@@ -26,7 +26,6 @@ export class HomeComponent {
   }
 
   getRouteAnimationData() {
-    // Optional: Du kannst spezifische Animationsdaten basierend auf der Route zurückgeben
     return this.activatedRoute.firstChild?.snapshot.routeConfig?.path;
   }
 }

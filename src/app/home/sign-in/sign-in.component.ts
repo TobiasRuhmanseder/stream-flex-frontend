@@ -1,20 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { SignInputComponent } from 'src/app/features/sign-input/sign-input.component';
-import { SharedService } from 'src/app/services/shared.service';
+
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
   selector: 'app-sign-in',
   standalone: true,
-  imports: [ReactiveFormsModule, SignInputComponent ],
+  imports: [ReactiveFormsModule, SignInputComponent],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss'
 })
 export class SignInComponent implements OnInit {
   loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private sharedService: SharedService) {
+  constructor(private fb: FormBuilder, private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -23,7 +24,7 @@ export class SignInComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(60), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/)]],
       rememberMe: [false]
     })
-    this.loginForm.controls['email'].setValue(this.checkExistingEmail());
+    this.loginForm.controls['email'].setValue(this.getEmailFromLetsGoInput());
   }
 
   // Getter for email as FormControl
@@ -43,10 +44,9 @@ export class SignInComponent implements OnInit {
 
     }
   }
-  // check if a email adress was put into the get stark input field on the landing page - übernehmen
-  checkExistingEmail(): string {
-    let email: string = this.sharedService.getIdentifier();
-    if (email != '') return email;
-    else return ''
+
+  getEmailFromLetsGoInput(): string {
+    const paramEmail = this.route.snapshot.queryParamMap.get('email') || '';
+    return paramEmail
   }
 }
