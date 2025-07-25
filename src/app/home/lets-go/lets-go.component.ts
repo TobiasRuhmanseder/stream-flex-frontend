@@ -37,7 +37,6 @@ export class LetsGoComponent implements OnInit {
     if (this.emailControl.invalid) return;
     const email = this.emailControl.value;
 
-    // Get reCAPTCHA token (or empty) and then check email on the server
     this.recaptchaService.getToken('check_email')
       .pipe(
         switchMap(token => this.authService.checkEmailExist({ email, recaptchaToken: token }))
@@ -63,4 +62,5 @@ export class LetsGoComponent implements OnInit {
       queryParams: { email }
     })
   }
+
 }

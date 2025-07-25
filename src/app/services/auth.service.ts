@@ -11,7 +11,7 @@ export class AuthService {
 
   private base = environment.apiBaseUrl;         // z.B. 'http://localhost:8000/api'
   private signUpUrl = `${this.base}/users/signup/`;
-  private emailExistUrl = `${this.base}/users/check-email/?email=`;
+  private emailExistUrl = `${this.base}/users/check-email/`;
 
   constructor(private http: HttpClient) { }
 
@@ -30,9 +30,25 @@ export class AuthService {
     return this.http.post<void>(this.signUpUrl, data)
   }
 
-  checkEmailExist(dto: CheckEmailDto): Observable<CheckEmailResponse> {
-    const url = this.emailExistUrl + dto.email
-    return this.http.get<CheckEmailResponse>(url)
+  signIn(){
+
   }
 
+  logout(){
+
+  }
+
+  checkEmailExist(dto: CheckEmailDto): Observable<CheckEmailResponse> {
+    console.log(dto);
+
+    return this.http.post<CheckEmailResponse>(this.emailExistUrl, dto);
+  }
+
+  getJwtToken(): string {
+    return ''
+  }
+
+  refreshJwtToken(): Observable<any>{
+    return this.http.post<CheckEmailResponse>(this.emailExistUrl, ''); //dummy
+  }
 }
