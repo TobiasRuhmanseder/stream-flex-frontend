@@ -3,7 +3,7 @@
         <h2>Registrieren</h2>
         <form [formGroup]="signupForm" (ngSubmit)="signup()">
 
-            <app-sign-input [control]="emailControl" label="E-Mail oder Telefonnummer" type="email"
+            <app-sign-input [control]="emailControl" label="E-Mail" type="email"
                 [errorMessages]="{
                     required: 'Dieses Feld ist erforderlich.',
                     invalidIdentifier: 'Bitte geben Sie eine gültige E-Mail-Adresse ein.'

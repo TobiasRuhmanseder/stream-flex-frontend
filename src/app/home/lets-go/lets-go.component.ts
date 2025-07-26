@@ -53,7 +53,6 @@ export class LetsGoComponent implements OnInit {
   }
 
   routingToSignUpOrSignIn(exists: any, email: string) {
-    console.log(exists);
     const route = exists ? 'sign-in' : 'sign-up';
     this.router.navigate([route], {
       relativeTo: this.activatedRoute.parent,

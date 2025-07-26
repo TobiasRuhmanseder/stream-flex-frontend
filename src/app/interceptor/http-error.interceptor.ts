@@ -11,7 +11,9 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 400) {
-        notificationService.show({ message: 'Invalid account data', type: 'error' });
+        const backendErrors = error.error as { [field: string]: string[] }
+        const messages = Object.values(backendErrors).flat().join('  ');
+        notificationService.show({ type: 'error', message: messages })
       }
       else if (error.status === 400 && error.error?.recaptchaToken) {
         const messages = error.error.recaptchaToken as string[];

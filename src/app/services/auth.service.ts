@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CheckEmailDto, CheckEmailResponse, SignUpData } from '../models/user.interfaces';
+import { CheckEmailResponse, SignUpRequest, CheckEmailRequest, SignUpResponse } from '../models/user.interfaces';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -26,29 +26,27 @@ export class AuthService {
     });
   }
 
-  signUp(data: SignUpData): Observable<void> {
-    return this.http.post<void>(this.signUpUrl, data)
+  signUp(data: SignUpRequest): Observable<SignUpResponse> {
+    return this.http.post<SignUpResponse>(this.signUpUrl, data)
   }
 
-  signIn(){
-
-  }
-
-  logout(){
+  signIn() {
 
   }
 
-  checkEmailExist(dto: CheckEmailDto): Observable<CheckEmailResponse> {
-    console.log(dto);
+  logout() {
 
-    return this.http.post<CheckEmailResponse>(this.emailExistUrl, dto);
+  }
+
+  checkEmailExist(data: CheckEmailRequest): Observable<CheckEmailResponse> {
+    return this.http.post<CheckEmailResponse>(this.emailExistUrl, data);
   }
 
   getJwtToken(): string {
     return ''
   }
 
-  refreshJwtToken(): Observable<any>{
+  refreshJwtToken(): Observable<any> {
     return this.http.post<CheckEmailResponse>(this.emailExistUrl, ''); //dummy
   }
 }

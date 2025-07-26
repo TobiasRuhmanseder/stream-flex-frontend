@@ -2,15 +2,19 @@
 /**
  * Data required to register a new user
  */
-export interface SignUpData {
+export interface SignUpRequest {
     email: string;
     password: string;
+    recaptchaToken: string;
+}
+export interface SignUpResponse {
+    email: string;
 }
 
 /**
  * Data required to authenticate an existing user
  */
-export interface SignInData {
+export interface SignInRequest {
     email: string;
     password: string;
 }
@@ -26,7 +30,7 @@ export interface UserProfile {
 /**
  * Payload for checking if an email address is already in use
  */
-export interface CheckEmailDto {
+export interface CheckEmailRequest {
     email: string;
     recaptchaToken: string;
 }
