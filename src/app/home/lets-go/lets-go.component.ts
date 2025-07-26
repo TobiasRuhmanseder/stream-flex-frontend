@@ -27,9 +27,7 @@ export class LetsGoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    grecaptcha.ready(() => {
-      // hier kannst Du später execute() aufrufen
-    });
+
   }
 
   letsGo() {

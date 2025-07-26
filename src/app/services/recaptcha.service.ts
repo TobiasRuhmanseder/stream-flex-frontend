@@ -26,7 +26,7 @@ export class RecaptchaService {
           .catch((err: any) => {
             sub.error(new Error('reCAPTCHA-Token konnte nicht erzeugt werden'));
           });
-      });
-    });
+      })
+    })
   }
 }

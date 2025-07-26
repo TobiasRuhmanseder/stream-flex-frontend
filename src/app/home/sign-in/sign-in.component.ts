@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { SignInputComponent } from 'src/app/features/sign-input/sign-input.component';
-
+import { RouterLink } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
   selector: 'app-sign-in',
   standalone: true,
-  imports: [ReactiveFormsModule, SignInputComponent],
+  imports: [ReactiveFormsModule, SignInputComponent, RouterLink],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss'
 })
