@@ -26,7 +26,7 @@ export class SignUpComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(60), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/)]],
     })
-    this.signupForm.controls['email'].setValue(this.getEmailFromLetsGoInput());
+    this.signupForm.controls['email'].setValue(this.getEmailFromUrl());
   }
 
   // Getter for identifier as FormControl
@@ -52,11 +52,14 @@ export class SignUpComponent implements OnInit {
         }),
         delay(2000)
       ).subscribe((resp: SignUpResponse) => {
-        this.router.navigate(['/sign-up-success'])
+        this.router.navigate(['sign-up-success'], {
+          relativeTo: this.route.parent,
+          queryParams: { email }
+        })
       })
   }
 
-  getEmailFromLetsGoInput(): string {
+  getEmailFromUrl(): string {
     const paramEmail = this.route.snapshot.queryParamMap.get('email') || '';
     return paramEmail
   }

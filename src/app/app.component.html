@@ -1,3 +1,3 @@
-<app-loading-overlay [visible]="isLoading"></app-loading-overlay>
+<app-loading-overlay [visible]=loadingOverlayService.isLoading()></app-loading-overlay>
 <app-signal-notification></app-signal-notification>
 <router-outlet></router-outlet>

@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SignalNotificationComponent } from './features/signal-notification/signal-notification.component';
 import { LoadingOverlayComponent } from './features/loading-overlay/loading-overlay.component';
+import { LoadingOverlayService } from './services/loading-overlay.service';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,6 @@ import { LoadingOverlayComponent } from './features/loading-overlay/loading-over
 })
 export class AppComponent {
   title = 'stream-flex-frontend';
-  
-  public isLoading = false; // Loading Overlay
+
+  public loadingOverlayService = inject(LoadingOverlayService);
 }

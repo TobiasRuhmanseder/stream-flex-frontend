@@ -6,6 +6,7 @@ import { AuthService } from './services/auth.service';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { httpAuthInterceptor } from './interceptor/http-auth.interceptor';
 import { httpErrorInterceptor } from './interceptor/http-error.interceptor';
+import { loadingInterceptor } from './interceptor/loading-interceptor';
 
 function initializeApp(): void | Promise<void> {
   const auth = inject(AuthService);
@@ -15,7 +16,7 @@ function initializeApp(): void | Promise<void> {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(withInterceptors([httpAuthInterceptor, httpErrorInterceptor])),
+    provideHttpClient(withInterceptors([loadingInterceptor, httpAuthInterceptor, httpErrorInterceptor])),
     provideAppInitializer(initializeApp),
     provideRouter(routes),
     provideAnimations(),
