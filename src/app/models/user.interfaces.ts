@@ -22,7 +22,7 @@ export interface SignInRequest {
 /**
  * Represents a user's profile information returned from the server
  */
-export interface UserProfile {
+export interface User {
     id: number;
     email: string;
 }

@@ -41,6 +41,10 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
           })
         );
       }
+      else if (error.status === 403 && error.error?.code === 'account_not_activated') {
+        notificationService.show({ message: 'Your account is not active yet. Please verify your email address.', type: 'error' });
+        return throwError(() => new Error('Account not activated'));
+      }
       else {
         notificationService.show({ message: 'Your session has expired. Please log in again.', type: 'error' });
       }

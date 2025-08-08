@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { CheckEmailResponse, SignUpRequest, CheckEmailRequest, SignUpResponse } from '../models/user.interfaces';
-import { Observable } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
+import { CheckEmailResponse, SignUpRequest, CheckEmailRequest, SignUpResponse, User } from '../models/user.interfaces';
+import { catchError, lastValueFrom, map, Observable, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 
@@ -9,21 +9,39 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AuthService {
 
+  private _user = signal<User | null>(null);
+  readonly user = this._user.asReadonly();
+  private ensureUser$?: Observable<User | null>;
+
   private base = environment.apiBaseUrl;         // z.B. 'http://localhost:8000/api'
   private signUpUrl = `${this.base}/users/signup/`;
   private emailExistUrl = `${this.base}/users/check-email/`;
+  private currentUserUrl = `${this.base}/users/me/`;
+  private getCsrfUrl = `${this.base}/users/csrf/`;
 
   constructor(private http: HttpClient) { }
 
-  firstRequestForAlwaysLoggedIn(): Promise<void> {
-    return new Promise((resolve) => {
-      // Simulate an API call to check if the user is logged in
-      setTimeout(() => {
-        // Here you would typically check if the user is logged in
-        // For this example, we assume the user is always logged in
-        resolve();
-      }, 1000); // Simulating a delay of 1 second
-    });
+
+
+  // look at the app.config.ts - initializeApp()
+  init(): Promise<void> {
+    const init$ = this.http.get(this.getCsrfUrl,{ withCredentials: true }).pipe(
+      switchMap(() => this.http.get<User>(this.currentUserUrl,{ withCredentials: true })),
+      tap( user => this._user.set(user)),
+      catchError(() => of(null)),
+      map(() => void 0)
+      )
+      console.log(this.user());
+      
+    return lastValueFrom(init$);
+  }
+
+  ensureUser(): Observable<User | null> {
+    const user = this._user();
+    if (user) return of(user)
+
+    return this.http.get<User>(this.currentUserUrl, { withCredentials: true }).pipe(
+      tap(user => this._user.set(user)), catchError(() => of(null)))
   }
 
   signUp(data: SignUpRequest): Observable<SignUpResponse> {
