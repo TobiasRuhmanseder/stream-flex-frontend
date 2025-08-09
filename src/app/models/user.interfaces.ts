@@ -15,8 +15,13 @@ export interface SignUpResponse {
  * Data required to authenticate an existing user
  */
 export interface SignInRequest {
-    email: string;
+    username: string;
     password: string;
+    rememberMe: boolean;
+}
+
+export interface SignInResponse {
+    user: User;
 }
 
 /**

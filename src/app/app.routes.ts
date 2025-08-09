@@ -5,8 +5,8 @@ import { LetsGoComponent } from './home/lets-go/lets-go.component';
 import { SignUpComponent } from './home/sign-up/sign-up.component';
 import { SignUpSuccessComponent } from './home/sign-up-success/sign-up-success.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { authGuard } from './app/guards/auth.guard';
-import { guestOnly } from './app/guards/guest-only.guard';
+import { authGuard } from './guards/auth.guard';
+import { guestOnly } from './guards/guest-only.guard';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home/lets-go', pathMatch: 'full' },

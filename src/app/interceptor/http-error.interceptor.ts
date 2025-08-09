@@ -1,57 +1,63 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
-import { NotificationSignalsService } from '../services/notification-signals.service';
 import { inject } from '@angular/core';
 import { catchError, switchMap, throwError } from 'rxjs';
+
+import { NotificationSignalsService } from '../services/notification-signals.service';
 import { AuthService } from '../services/auth.service';
 
 export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
-  const notificationService = inject(NotificationSignalsService);
+  const notifyService = inject(NotificationSignalsService);
   const authService = inject(AuthService);
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
+      // 0 = Network error / CORS / aborted
+      if (error.status === 0) {
+        notifyService.showKey('network.offline');
+        return throwError(() => error);
+      }
+      // 400: Validation errors (including optional reCAPTCHA field errors)
       if (error.status === 400) {
-        const backendErrors = error.error as { [field: string]: string[] }
-        const messages = Object.values(backendErrors).flat().join('  ');
-        notificationService.show({ type: 'error', message: messages })
+        // reCAPTCHA field specifically
+        if (error.error?.recaptchaToken) {
+          const messages = error.error.recaptchaToken as string[];
+          notifyService.show({ type: 'error', message: messages.join(' ') });
+          return throwError(() => error);
+        }
+        // generic field-errors dict { field: string[] }
+        if (error.error && typeof error.error === 'object') {
+          const backendErrors = error.error as Record<string, string[]>;
+          const message = Object.values(backendErrors).flat().join('  ');
+          notifyService.show({ type: 'error', message: message || 'Please check your input.' });
+          return throwError(() => error);
+        }
+        // fallback
+        notifyService.showKey('http.badRequest');
+        return throwError(() => error);
       }
-      else if (error.status === 400 && error.error?.recaptchaToken) {
-        const messages = error.error.recaptchaToken as string[];
-        notificationService.show({ message: messages.join(' '), type: 'error' })
-      }
-      else if (error.status === 401) {
+      // 401: Access expired → try refresh (cookie-based). If success, repeat original request.
+      if (error.status === 401) {
         return authService.refreshJwtToken().pipe(
-          switchMap(newToken => {
-            if (newToken) {
-              const authReq = req.clone({
-                setHeaders: { Authorization: `Bearer ${newToken}` }
-              });
-              return next(authReq);
+          switchMap((ok) => {
+            if (ok) {
+              // Cookie refreshed → simply retry the original request
+              return next(req);
             }
-            // no refresh-token or failure → Logout
-            authService.logout();
-            notificationService.show({ message: 'Session expired. Please log in again.', type: 'error' });
+            // no refresh possible → logout + toast
+            authService.signOut();
+            notifyService.showKey('auth.sessionExpired');
             return throwError(() => error);
           }),
-          catchError(refreshErr => {
-            // refresh failure
-            authService.logout();
-            notificationService.show({ message: 'Unable to refresh session. Please log in again.', type: 'error' });
+          catchError((refreshErr) => {
+            authService.signOut();
+            notifyService.showKey('auth.refreshFailed');
             return throwError(() => refreshErr);
           })
         );
       }
-      else if (error.status === 403 && error.error?.code === 'account_not_activated') {
-        notificationService.show({ message: 'Your account is not active yet. Please verify your email address.', type: 'error' });
-        return throwError(() => new Error('Account not activated'));
-      }
-      else {
-        notificationService.show({ message: 'Your session has expired. Please log in again.', type: 'error' });
-      }
+      // Everything else → generic unexpected
+      notifyService.showKey('http.unexpected');
       return throwError(() => error);
     })
-  )
-}
-
-
-
+  );
+};

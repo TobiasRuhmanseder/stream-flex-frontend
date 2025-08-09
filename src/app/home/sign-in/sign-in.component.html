@@ -1,7 +1,7 @@
 <div class="sign-dialog sign-in">
     <div>
         <h2>Einloggen</h2>
-        <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <form [formGroup]="loginForm" (ngSubmit)="signIn()">
 
             <app-sign-input [control]="emailControl" label="E-Mail-Adresse" type="email"
                 [errorMessages]="{

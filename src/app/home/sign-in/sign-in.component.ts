@@ -3,6 +3,10 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormControl } 
 import { SignInputComponent } from 'src/app/features/sign-input/sign-input.component';
 import { RouterLink } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+import { NotificationSignalsService } from 'src/app/services/notification-signals.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { SignInRequest } from 'src/app/models/user.interfaces';
 
 
 @Component({
@@ -15,7 +19,8 @@ import { ActivatedRoute } from '@angular/router';
 export class SignInComponent implements OnInit {
   loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private route: ActivatedRoute) {
+  constructor(private fb: FormBuilder, private route: ActivatedRoute, private authService: AuthService,
+    private router: Router, private notifyService: NotificationSignalsService) {
   }
 
   ngOnInit(): void {
@@ -37,14 +42,34 @@ export class SignInComponent implements OnInit {
     return this.loginForm.get('password') as FormControl;
   }
 
-  login() {
-    if (this.loginForm.valid) {
-      // Backend 
-      console.log(this.emailControl.value);
-
-    }
+  // Getter for password as FormControl
+  get rememberMe(): FormControl {
+    return this.loginForm.get('rememberMe') as FormControl;
   }
 
+  signIn() {
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      this.notifyService.showKey('http.badRequest');
+      return;
+    }
+    const payload: SignInRequest = { username: this.emailControl.value, password: this.passwordControl.value, rememberMe: this.rememberMe.value };
+    this.authService.signIn(payload).subscribe({
+      next: () => {
+        const redirect = this.route.snapshot.queryParamMap.get('redirectTo') ?? '/dashboard';
+        this.router.navigateByUrl(redirect);
+      },
+      error: (err) => {
+        console.log(err);
+
+        // Domain-specific 403 handled here (Interceptor leaves it through) - Other errors are globally handled by the interceptor
+        if (err?.status === 403 && err?.error?.detail === 'Your account is not activated yet.') {
+          this.notifyService.showKey('auth.accountNotActivated', 'error');
+          return;
+        }
+      }
+    });
+  }
   getEmailFromLetsGoInput(): string {
     const paramEmail = this.route.snapshot.queryParamMap.get('email') || '';
     return paramEmail
