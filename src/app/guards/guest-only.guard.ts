@@ -8,7 +8,5 @@ export const guestOnly: CanMatchFn = (route, segments) => {
   const router = inject(Router);
 
   const loggedIn = !!authService.user();
-  console.log(authService.user());
-  
   return loggedIn ? router.createUrlTree(['/dashboard']) : true;
 };

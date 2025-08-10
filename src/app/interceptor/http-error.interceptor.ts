@@ -35,15 +35,15 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
         notifyService.showKey('http.badRequest');
         return throwError(() => error);
       }
-      // 401: Access expired → try refresh (cookie-based). If success, repeat original request.
+      // 401: Access expired - try refresh (cookie-based). If success, repeat original request.
       if (error.status === 401) {
         return authService.refreshJwtToken().pipe(
           switchMap((ok) => {
             if (ok) {
-              // Cookie refreshed → simply retry the original request
+              // Cookie refreshed - simply retry the original request
               return next(req);
             }
-            // no refresh possible → logout + toast
+            // no refresh possible - logout + toast
             authService.signOut();
             notifyService.showKey('auth.sessionExpired');
             return throwError(() => error);
@@ -55,7 +55,7 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
           })
         );
       }
-      // Everything else → generic unexpected
+      // Everything else - generic unexpected
       notifyService.showKey('http.unexpected');
       return throwError(() => error);
     })

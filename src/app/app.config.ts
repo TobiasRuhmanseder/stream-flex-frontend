@@ -6,6 +6,7 @@ import { AuthService } from './services/auth.service';
 import { provideHttpClient, withInterceptors, withXsrfConfiguration } from '@angular/common/http';
 import { httpErrorInterceptor } from './interceptor/http-error.interceptor';
 import { loadingInterceptor } from './interceptor/loading-interceptor';
+import { csrfInterceptor } from './interceptor/csrf.interceptor';
 
 function initializeApp(): void | Promise<void> {
   return inject(AuthService).init();
@@ -15,7 +16,7 @@ function initializeApp(): void | Promise<void> {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(withInterceptors([loadingInterceptor, httpErrorInterceptor])
+    provideHttpClient(withInterceptors([csrfInterceptor, loadingInterceptor, httpErrorInterceptor])
       , withXsrfConfiguration({
         cookieName: 'csrftoken',
         headerName: 'X-CSRFToken',

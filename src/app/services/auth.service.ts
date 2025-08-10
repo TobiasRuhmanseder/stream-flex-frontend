@@ -35,6 +35,8 @@ export class AuthService {
       catchError(() => of(null)),
       map(() => void 0)
     )
+
+
     return lastValueFrom(init$);
   }
 
@@ -62,12 +64,12 @@ export class AuthService {
    */
   signOut(): void {
     this.http.post(this.signOutUrl, {}, { withCredentials: true }).subscribe({
-      next: () => {},
-      error: () => {},
+      next: () => { },
+      error: () => { },
       complete: () => {
         this._user.set(null);
         this.router.navigate(['/login']);
-      
+
       },
     });
   }

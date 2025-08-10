@@ -9,9 +9,10 @@ import { AuthService } from '../services/auth.service';
 })
 export class DashboardComponent {
 
-  constructor(private authService: AuthService){  }
+  constructor(private authService: AuthService) { }
 
-logout(){
-  this.authService.signOut();
-}
+  logout() {
+    this.authService.signOut();
+
+  }
 }
