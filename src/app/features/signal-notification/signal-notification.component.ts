@@ -29,7 +29,7 @@ export class SignalNotificationComponent {
   constructor() {
     effect(() => {
       if (this.globalNotification()) {
-        setTimeout(() => this.notificationService.clear(), 2000)
+        setTimeout(() => this.notificationService.clear(), 4000)
       }
     })
   }

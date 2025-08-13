@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, FormControl } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, FormControl, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { delay, switchMap, tap } from 'rxjs';
 import { SignInputComponent } from 'src/app/features/sign-input/sign-input.component';
@@ -13,7 +13,7 @@ import { SignUpResponse } from 'src/app/models/user.interfaces';
   selector: 'app-sign-up',
   imports: [ReactiveFormsModule, SignInputComponent],
   templateUrl: './sign-up.component.html',
-  styleUrl: './sign-up.component.scss'
+  styleUrls: ['./sign-up.component.scss']
 })
 export class SignUpComponent implements OnInit {
   signupForm!: FormGroup;
@@ -24,9 +24,33 @@ export class SignUpComponent implements OnInit {
   ngOnInit(): void {
     this.signupForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(60), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/)]],
-    })
+      password: ['', [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.maxLength(60),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/)
+      ]],
+      confirmPassword: ['', [Validators.required, this.confirmPasswordValidator()]],
+    });
+
+    // Prefill email from URL if present
     this.signupForm.controls['email'].setValue(this.getEmailFromUrl());
+
+    // Re-validate confirmPassword whenever password changes
+    this.passwordControl.valueChanges.subscribe(() => {
+      this.confirmPasswordControl.updateValueAndValidity({ onlySelf: true });
+    });
+  }
+
+  private confirmPasswordValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const parent = control.parent as FormGroup | null;
+      if (!parent) return null;
+      const pwd = parent.get('password')?.value;
+      const confirm = control.value;
+      if (!confirm || !pwd) return null; 
+      return confirm === pwd ? null : { passwordMismatch: true };
+    };
   }
 
   // Getter for identifier as FormControl
@@ -37,6 +61,10 @@ export class SignUpComponent implements OnInit {
   // Getter for password as FormControl
   get passwordControl(): FormControl {
     return this.signupForm.get('password') as FormControl;
+  }
+
+  get confirmPasswordControl(): FormControl {
+    return this.signupForm.get('confirmPassword') as FormControl;
   }
 
   signup() {
@@ -64,5 +92,3 @@ export class SignUpComponent implements OnInit {
     return paramEmail
   }
 }
-
-

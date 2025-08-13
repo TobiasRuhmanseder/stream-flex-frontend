@@ -1,0 +1,12 @@
+.info-text {
+    text-align: center;
+}
+
+.link {
+    cursor: pointer;
+    color: white;
+
+    &:hover {
+        color: red;
+    }
+}

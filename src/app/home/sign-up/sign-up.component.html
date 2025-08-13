@@ -16,6 +16,15 @@
                     pattern: 'Das Passwort muss mindestens einen Großbuchstaben, einen Kleinbuchstaben, eine Zahl und ein Sonderzeichen enthalten.'
                 }">
             </app-sign-input>
+            <app-sign-input
+                [control]="confirmPasswordControl"
+                label="Passwort bestätigen"
+                type="password"
+                [errorMessages]="{
+                    required: 'Bitte bestätigen Sie Ihr Passwort.',
+                    passwordMismatch: 'Die Passwörter stimmen nicht überein.'
+                }">
+            </app-sign-input>
             <button class="bttn-red bttn-full-width" type="submit" [disabled]="signupForm.invalid">Registrieren</button>
         </form>
     </div>

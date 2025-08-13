@@ -46,3 +46,11 @@ export interface CheckEmailRequest {
 export interface CheckEmailResponse {
     exists: boolean;
 }
+
+export interface PasswordResetConfirmRequest {
+  uid: string;
+  token: string;
+  newPassword: string;
+}
+
+

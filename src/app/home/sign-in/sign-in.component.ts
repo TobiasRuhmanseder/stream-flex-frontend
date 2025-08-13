@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { NotificationSignalsService } from 'src/app/services/notification-signals.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { SignInRequest } from 'src/app/models/user.interfaces';
-import { throwError } from 'rxjs';
+import { catchError, EMPTY } from 'rxjs';
 
 
 @Component({
@@ -55,22 +55,27 @@ export class SignInComponent implements OnInit {
       return;
     }
     const payload: SignInRequest = { username: this.emailControl.value, password: this.passwordControl.value, rememberMe: this.rememberMe.value };
-    this.authService.signIn(payload).subscribe({
-      next: () => {
-        const redirect = this.route.snapshot.queryParamMap.get('redirectTo') ?? '/dashboard';
-        this.router.navigateByUrl(redirect);
-      },
-      error: (err) => {
-        console.log(err);
-
-        // Domain-specific 403 handled here (Interceptor leaves it through) - Other errors are globally handled by the interceptor
-        if (err?.status === 403 && err?.error?.detail === 'Your account is not activated yet.') {
-          this.notifyService.showKey('auth.accountNotActivated', 'error');
-          return;
+    this.authService.signIn(payload).pipe(
+      catchError(err => {
+        if (err?.status === 401) {
+          this.notifyService.showKey('auth.invalidCredentials');
+          return EMPTY;
         }
-      }
+        if (err?.status === 403) {
+          this.notifyService.showKey('auth.accountNotActivated', 'error');
+          this.router.navigate(['/home/verify-email'], {
+            queryParams: { email: this.emailControl.value, notActivated: true}
+          });
+          return EMPTY;
+        }
+        return EMPTY;
+      })
+    ).subscribe(() => {
+      const redirect = this.route.snapshot.queryParamMap.get('redirectTo') ?? '/dashboard';
+      this.router.navigateByUrl(redirect);
     });
   }
+
   getEmailFromLetsGoInput(): string {
     const paramEmail = this.route.snapshot.queryParamMap.get('email') || '';
     return paramEmail

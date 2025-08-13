@@ -1,9 +1,9 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, switchMap, throwError } from 'rxjs';
-
 import { NotificationSignalsService } from '../services/notification-signals.service';
 import { AuthService } from '../services/auth.service';
+import { SKIP_AUTH_REFRESH } from './http-context.tokens';
 
 export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
   const notifyService = inject(NotificationSignalsService);
@@ -37,6 +37,10 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
       }
       // 401: Access expired - try refresh (cookie-based). If success, repeat original request.
       if (error.status === 401) {
+        // Skip refresh flow for explicitly marked requests (e.g., sign-in)
+        if (req.context.get(SKIP_AUTH_REFRESH)) {
+          return throwError(() => error);
+        }
         return authService.refreshJwtToken().pipe(
           switchMap((ok) => {
             if (ok) {
@@ -54,6 +58,10 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
             return throwError(() => refreshErr);
           })
         );
+      }
+      // 403: Let components handle domain-specific messages (e.g., account not activated)
+      if (error.status === 403) {
+        return throwError(() => error);
       }
       // Everything else - generic unexpected
       notifyService.showKey('http.unexpected');

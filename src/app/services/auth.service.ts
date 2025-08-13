@@ -1,9 +1,11 @@
 import { Injectable, signal } from '@angular/core';
-import { CheckEmailResponse, SignUpRequest, CheckEmailRequest, SignUpResponse, User, SignInRequest, SignInResponse } from '../models/user.interfaces';
+import { CheckEmailResponse, SignUpRequest, CheckEmailRequest, SignUpResponse, User, SignInRequest, SignInResponse, PasswordResetConfirmRequest } from '../models/user.interfaces';
 import { catchError, lastValueFrom, map, Observable, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { HttpContext } from '@angular/common/http';
+import { SKIP_AUTH_REFRESH } from '../interceptor/http-context.tokens';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,6 @@ export class AuthService {
 
   private _user = signal<User | null>(null);
   readonly user = this._user.asReadonly();
-  private ensureUser$?: Observable<User | null>;
 
   private base = environment.apiBaseUrl;         // z.B. 'http://localhost:8000/api'
   private signUpUrl = `${this.base}/users/signup/`;
@@ -22,6 +23,10 @@ export class AuthService {
   private signInUrl = `${this.base}/users/sign-in/`;
   private signOutUrl = `${this.base}/users/sign-out/`;
   private tokenRefreshUrl = `${this.base}/users/token-refresh/`;
+  private verifyEmailUrl = `${this.base}/users/verify-email/`;
+  private resendVerifyEmailUrl = `${this.base}/users/resend-verification/`;
+  private passwordResetUrl = `${this.base}/users/password-reset/`;
+  private passwordResetConfirmUrl = `${this.base}/users/password-reset/`;
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -53,7 +58,9 @@ export class AuthService {
   }
 
   signIn(data: SignInRequest): Observable<SignInResponse> {
-    return this.http.post<SignInResponse>(this.signInUrl, data, { withCredentials: true }).pipe(
+    const context = new HttpContext().set(SKIP_AUTH_REFRESH, true);
+
+    return this.http.post<SignInResponse>(this.signInUrl, data, { withCredentials: true, context }).pipe(
       tap(res => this._user.set(res.user))
     );
   }
@@ -63,7 +70,9 @@ export class AuthService {
    * This method self-subscribes because it is often called from interceptors.
    */
   signOut(): void {
-    this.http.post(this.signOutUrl, {}, { withCredentials: true }).subscribe({
+    const context = new HttpContext().set(SKIP_AUTH_REFRESH, true);
+
+    this.http.post(this.signOutUrl, {}, { withCredentials: true, context }).subscribe({
       next: () => { },
       error: () => { },
       complete: () => {
@@ -84,14 +93,36 @@ export class AuthService {
     return this.http.post<CheckEmailResponse>(this.emailExistUrl, data);
   }
 
+  passwordResetRequest(email: string) {
+    return this.http.post<void>(this.passwordResetUrl, { email }, { withCredentials: true });
+  }
+
+  passwordResetConfirm(data: PasswordResetConfirmRequest) {
+    return this.http.post<void>(this.passwordResetConfirmUrl, data, { withCredentials: true });
+  }
+
   /**
    * Tries to refresh the access token using HttpOnly cookies.
    * Returns true on success, false on failure.
    */
   refreshJwtToken(): Observable<boolean> {
-    return this.http.post(this.tokenRefreshUrl, {}, { withCredentials: true }).pipe(
+    const context = new HttpContext().set(SKIP_AUTH_REFRESH, true);
+
+    return this.http.post(this.tokenRefreshUrl, {}, { withCredentials: true, context }).pipe(
       map(() => true),
       catchError(() => of(false))
     );
   }
+
+  verifyEmail(token: string) {
+    const params = new HttpParams().set('token', token);
+    return this.http.get<void>(this.verifyEmailUrl, { params, withCredentials: true });
+  }
+
+  resendVerificaton(email: string) {
+    return this.http.post(this.resendVerifyEmailUrl, { email }, { withCredentials: true });
+  }
+
+
+
 }

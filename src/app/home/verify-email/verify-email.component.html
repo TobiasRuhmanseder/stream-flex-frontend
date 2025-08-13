@@ -1,0 +1,40 @@
+@if (success()) {
+<h3 class="info-text">
+    <h1>Verifizierung von {{email()}} erfolgreich!</h1>
+    <p>Sie können sich jetzt einloggen.</p>
+    <br>
+    <a class="link" [routerLink]="['/home/sign-in']" [queryParams]="{ email: email() }">
+        Zur Loginseite hier klicken
+    </a>
+</h3>
+}
+@else if (resend()){
+<h3 class="info-text">
+    <h1>Das erneute senden der Verifikations war erfolgreich!</h1>
+    <p>Sehen sie in ihrem E-Mail Postfach nach.</p>
+    <br>
+    <a class="link" (click)="resendVerification()" >
+        Neue Verifizierungs-E-Mail anfordern
+    </a>
+</h3>
+}
+@else if (notActivated()){
+<h3 class="info-text">
+    <h1>Deine E-Mail Adresse muss noch verifiziert werden.</h1>
+    <p>Sehen sie in ihrem E-Mail Postfach nach oder fordern sie erneut eine Verifizierung an.</p>
+    <br>
+    <a class="link" (click)="resendVerification()">
+        Neue Verifizierungs-E-Mail anfordern
+    </a>
+</h3>
+}
+@else {
+<h3 class="info-text">
+    <h1>Etwas ist schief gelaufen!</h1>
+    <p>Der Verifizierungslink ist ungültig oder abgelaufen.</p>
+    <br>
+    <a class="link" (click)="resendVerification()">
+        Neue Verifizierungs-E-Mail anfordern
+    </a>
+</h3>
+}
