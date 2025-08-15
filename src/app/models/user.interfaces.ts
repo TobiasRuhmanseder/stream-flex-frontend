@@ -18,6 +18,7 @@ export interface SignInRequest {
     username: string;
     password: string;
     rememberMe: boolean;
+    recaptchaToken: string;
 }
 
 export interface SignInResponse {
@@ -50,7 +51,13 @@ export interface CheckEmailResponse {
 export interface PasswordResetConfirmRequest {
   uid: string;
   token: string;
-  newPassword: string;
+  new_password: string;
+  recaptchaToken: string;
+}
+
+export interface PasswordResetRequest {
+    email: string;
+    recaptchaToken: string;
 }
 
 

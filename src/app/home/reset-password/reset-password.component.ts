@@ -3,10 +3,11 @@ import { ReactiveFormsModule, FormBuilder, Validators, FormGroup, FormControl, A
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NotificationSignalsService } from 'src/app/services/notification-signals.service';
-import { EMPTY, catchError } from 'rxjs';
+import { EMPTY, catchError, switchMap } from 'rxjs';
 import { SignInputComponent } from 'src/app/features/sign-input/sign-input.component';
 import { PasswordResetConfirmRequest } from 'src/app/models/user.interfaces';
 import { AuthService } from 'src/app/services/auth.service';
+import { RecaptchaService } from 'src/app/services/recaptcha.service';
 
 
 
@@ -23,7 +24,7 @@ export class ResetPasswordComponent implements OnInit {
   form!: FormGroup;
 
   constructor(private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private authService: AuthService, private notifyService: NotificationSignalsService,
-  ) { }
+    private recaptchaService: RecaptchaService) { }
 
   ngOnInit(): void {
     const qp = this.route.snapshot.queryParamMap;
@@ -78,26 +79,39 @@ export class ResetPasswordComponent implements OnInit {
   get confirmPasswordControl(): FormControl { return this.form.get('confirmPassword') as FormControl; }
 
   resetPassword() {
-    if (this.form.invalid ) return;
-    const password = this.passwordControl.value;
-    this.form.controls['password'].setValue('');
-    this.form.controls['confirmPassword'].setValue('');
-    this.form.markAsUntouched();
-    const uid = this.uid(); 
+    if (this.form.invalid) return;
+    const uid = this.uid();
     const token = this.token();
+    const newPassword = this.passwordControl.value as string;
+    this.emptyFields();
+
     if (!uid || !token) {
       this.notifyService.showKey('auth.resetInvalidLink', 'error');
       return;
     }
-    const payload: PasswordResetConfirmRequest = {uid, token , newPassword: password};
-    this.authService.passwordResetConfirm(payload).pipe(
+    this.recaptchaService.getToken('resetpassword').pipe(
+      switchMap(recaptchaToken => {
+        const payload: PasswordResetConfirmRequest = { uid, token, new_password: newPassword, recaptchaToken };
+        return this.authService.passwordResetConfirm(payload);
+      }),
       catchError(() => {
         this.notifyService.showKey('auth.resetFailed', 'error');
         return EMPTY;
       })
     ).subscribe(() => {
       this.notifyService.showKey('auth.resetSuccess', 'success');
-      this.router.navigate(['/home/sign-in'], { queryParams: { email: this.route.snapshot.queryParamMap.get('email') ?? '' } });
+      this.router.navigate(
+        ['/home/sign-in'],
+        { queryParams: { email: this.route.snapshot.queryParamMap.get('email') ?? '' } }
+      );
     });
   }
+
+  emptyFields() {
+    this.passwordControl.reset('', { emitEvent: false });
+    this.confirmPasswordControl.reset('', { emitEvent: false });
+    this.form.markAsUntouched();
+    this.form.markAsPristine();
+  }
+
 }

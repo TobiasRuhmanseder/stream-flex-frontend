@@ -24,8 +24,8 @@ export const routes: Routes = [
             { path: 'sign-up', component: SignUpComponent },
             { path: 'sign-up-success', component: SignUpSuccessComponent },
             { path: 'verify-email', component: VerifyEmailComponent },
-            { path: 'forgot-password', component: ForgotPasswordComponent },
-            { path: 'reset-password', component: ResetPasswordComponent},
+            { path: 'password-forgot', component: ForgotPasswordComponent },
+            { path: 'password-reset', component: ResetPasswordComponent},
         ]
     },
     { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },

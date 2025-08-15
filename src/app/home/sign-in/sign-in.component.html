@@ -24,7 +24,7 @@
             </label>
             <button class="bttn-red bttn-full-width" type="submit" [disabled]="loginForm.invalid">Einloggen</button>
         </form>
-        <a class="route-text"  >Passwort vergessen?</a>
+        <a class="route-text" [routerLink]="['/home/password-forgot']"> Passwort vergessen? </a>
         <a class="route-text" [routerLink]="['/home/sign-up']">Noch nicht registiert?</a>
     </div>
     <p class="recapcha-text">Diese Seite ist durch Google reCAPTCHA abgesichert, um sicherzustellen, dass Sie kein Bot sind.<br>

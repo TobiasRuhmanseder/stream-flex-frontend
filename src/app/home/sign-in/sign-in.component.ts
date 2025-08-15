@@ -7,7 +7,8 @@ import { Router } from '@angular/router';
 import { NotificationSignalsService } from 'src/app/services/notification-signals.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { SignInRequest } from 'src/app/models/user.interfaces';
-import { catchError, EMPTY } from 'rxjs';
+import { catchError, EMPTY, switchMap } from 'rxjs';
+import { RecaptchaService } from 'src/app/services/recaptcha.service';
 
 
 @Component({
@@ -21,7 +22,7 @@ export class SignInComponent implements OnInit {
   loginForm!: FormGroup;
 
   constructor(private fb: FormBuilder, private route: ActivatedRoute, private authService: AuthService,
-    private router: Router, private notifyService: NotificationSignalsService) {
+    private router: Router, private notifyService: NotificationSignalsService, private recaptchaService: RecaptchaService) {
   }
 
   ngOnInit(): void {
@@ -54,20 +55,27 @@ export class SignInComponent implements OnInit {
       this.notifyService.showKey('http.badRequest');
       return;
     }
-    const payload: SignInRequest = { username: this.emailControl.value, password: this.passwordControl.value, rememberMe: this.rememberMe.value };
-    this.authService.signIn(payload).pipe(
+    const payloadBase = {
+      username: this.emailControl.value,
+      password: this.passwordControl.value,
+      rememberMe: this.rememberMe.value
+    };
+
+    this.recaptchaService.getToken('signin').pipe(
+      switchMap(token => this.authService.signIn({ ...payloadBase, recaptchaToken: token })),
       catchError(err => {
         if (err?.status === 401) {
-          this.notifyService.showKey('auth.invalidCredentials');
+          this.notifyService.showKey('auth.invalidCredentials', 'error');
           return EMPTY;
         }
         if (err?.status === 403) {
           this.notifyService.showKey('auth.accountNotActivated', 'error');
-          this.router.navigate(['/home/verify-email'], {
-            queryParams: { email: this.emailControl.value, notActivated: true}
+          this.router.navigate(['/home/sign-in/verify-email'], {
+            queryParams: { email: this.emailControl.value, notActivated: true }
           });
           return EMPTY;
         }
+        this.notifyService.showKey('http.unexpected', 'error');
         return EMPTY;
       })
     ).subscribe(() => {
@@ -80,4 +88,7 @@ export class SignInComponent implements OnInit {
     const paramEmail = this.route.snapshot.queryParamMap.get('email') || '';
     return paramEmail
   }
+
+
+
 }

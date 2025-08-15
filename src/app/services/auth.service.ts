@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { CheckEmailResponse, SignUpRequest, CheckEmailRequest, SignUpResponse, User, SignInRequest, SignInResponse, PasswordResetConfirmRequest } from '../models/user.interfaces';
+import { CheckEmailResponse, SignUpRequest, CheckEmailRequest, SignUpResponse, User, SignInRequest, SignInResponse, PasswordResetConfirmRequest, PasswordResetRequest } from '../models/user.interfaces';
 import { catchError, lastValueFrom, map, Observable, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -26,7 +26,7 @@ export class AuthService {
   private verifyEmailUrl = `${this.base}/users/verify-email/`;
   private resendVerifyEmailUrl = `${this.base}/users/resend-verification/`;
   private passwordResetUrl = `${this.base}/users/password-reset/`;
-  private passwordResetConfirmUrl = `${this.base}/users/password-reset/`;
+  private passwordResetConfirmUrl = `${this.base}/users/password-reset/confirm/`;
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -93,8 +93,8 @@ export class AuthService {
     return this.http.post<CheckEmailResponse>(this.emailExistUrl, data);
   }
 
-  passwordResetRequest(email: string) {
-    return this.http.post<void>(this.passwordResetUrl, { email }, { withCredentials: true });
+  passwordResetRequest(data: PasswordResetRequest) {
+    return this.http.post<void>(this.passwordResetUrl, data, { withCredentials: true });
   }
 
   passwordResetConfirm(data: PasswordResetConfirmRequest) {
