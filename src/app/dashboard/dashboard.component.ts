@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.service';
+import { HeaderMenuComponent } from './header-menu/header-menu.component';
+
 
 @Component({
   selector: 'app-dashboard',
-  imports: [],
+  imports: [HeaderMenuComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })

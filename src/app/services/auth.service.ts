@@ -5,15 +5,18 @@ import { environment } from 'src/environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { HttpContext } from '@angular/common/http';
-import { SKIP_AUTH_REFRESH } from '../interceptor/http-context.tokens';
+import { SKIP_AUTH_REFRESH, SILENT_AUTH_CHECK } from '../interceptor/http-context.tokens';
 
+const STORAGE_KEY = 'sf_maybeLoggedIn';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
+  
   private _user = signal<User | null>(null);
   readonly user = this._user.asReadonly();
+
+  maybeLoggedIn = signal<boolean>(localStorage.getItem(STORAGE_KEY) === '1');
 
   private base = environment.apiBaseUrl;         // z.B. 'http://localhost:8000/api'
   private signUpUrl = `${this.base}/users/signup/`;
@@ -28,22 +31,62 @@ export class AuthService {
   private passwordResetUrl = `${this.base}/users/password-reset/`;
   private passwordResetConfirmUrl = `${this.base}/users/password-reset/confirm/`;
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router) {
+    this.storageSync();
+  }
 
+  /** Syncs the maybeLoggedIn hint with localStorage and across tabs. */
+  storageSync(): void {
+    // initialize from localStorage
+    try {
+      const v = localStorage.getItem(STORAGE_KEY) === '1';
+      this.maybeLoggedIn.set(v);
+    } catch {}
+
+    // cross-tab sync
+    window.addEventListener('storage', (e) => {
+      if (e.key === STORAGE_KEY) {
+        const nv = e.newValue === '1';
+        this.maybeLoggedIn.set(nv);
+        if (!nv) this._user.set(null);
+      }
+    });
+  }
+
+  /** Mark hint after successful sign-in. */
+  markLoggedInHint(): void {
+    this.maybeLoggedIn.set(true);
+    try { localStorage.setItem(STORAGE_KEY, '1'); } catch {}
+  }
+
+  /** Clear hint on sign-out or when session is gone. */
+  clearLoggedInHint(): void {
+    this.maybeLoggedIn.set(false);
+    try { localStorage.removeItem(STORAGE_KEY); } catch {}
+  }
 
 
   // look at the app.config.ts - initializeApp()
   init(): Promise<void> {
-    const init$ = this.http.get(this.getCsrfUrl, { withCredentials: true }).pipe(
-      switchMap(() => this.http.get<User>(this.currentUserUrl, { withCredentials: true })),
-      tap(user => this._user.set(user)),
-      catchError(() => of(null)),
-      map(() => void 0)
-    )
+    const silentCtx = new HttpContext().set(SILENT_AUTH_CHECK, true);
 
+    const csrf$ = this.http.get(this.getCsrfUrl, { withCredentials: true });
+    const maybeMe$ = this.maybeLoggedIn()
+      ? this.http.get<User>(this.currentUserUrl, { withCredentials: true, context: silentCtx }).pipe(
+          tap(user => this._user.set(user)),
+          catchError(() => of(null)),
+          map(() => void 0)
+        )
+      : of(void 0);
 
+    const init$ = csrf$.pipe(switchMap(() => maybeMe$));
     return lastValueFrom(init$);
   }
+
+  // SILENT_AUTH_CHECK: no toast/console on unauthenticated /me
+  // SKIP_AUTH_REFRESH: do not attempt interceptor refresh for this request
+  //look at the http-error.tokens.ts file for more informations
+
 
   ensureUser(): Observable<User | null> {
     const user = this._user();
@@ -61,7 +104,7 @@ export class AuthService {
     const context = new HttpContext().set(SKIP_AUTH_REFRESH, true);
 
     return this.http.post<SignInResponse>(this.signInUrl, data, { withCredentials: true, context }).pipe(
-      tap(res => this._user.set(res.user))
+      tap(res => { this._user.set(res.user); this.markLoggedInHint(); })
     );
   }
 
@@ -77,8 +120,8 @@ export class AuthService {
       error: () => { },
       complete: () => {
         this._user.set(null);
+        this.clearLoggedInHint();
         this.router.navigate(['/login']);
-
       },
     });
   }
@@ -122,7 +165,5 @@ export class AuthService {
   resendVerificaton(email: string) {
     return this.http.post(this.resendVerifyEmailUrl, { email }, { withCredentials: true });
   }
-
-
 
 }

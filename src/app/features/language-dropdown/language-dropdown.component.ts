@@ -1,29 +1,41 @@
-import { Component } from '@angular/core';
+import { Component, signal, HostListener, inject, ElementRef } from '@angular/core';
 
 @Component({
-    selector: 'app-language-dropdown',
-    standalone: true,
-    imports: [],
-    templateUrl: './language-dropdown.component.html',
-    styleUrl: './language-dropdown.component.scss'
+  selector: 'app-language-dropdown',
+  standalone: true,
+  imports: [],
+  templateUrl: './language-dropdown.component.html',
+  styleUrl: './language-dropdown.component.scss'
 })
 export class LanguageDropdownComponent {
-  languages: { code: string; label: string }[] = [
+  private host = inject(ElementRef);
+  languages = signal([
     { code: 'de', label: 'Deutsch' },
     { code: 'en', label: 'English' },
-  ];
-  selectedLanguage: { code: string; label: string } = this.languages[0];
-  isOpen: boolean = false;
+  ]);
+
+  
+  selectedLanguage = signal(this.languages()[0]);
+  isOpen = signal<boolean>(false);
 
   // Toggles the dropdown's visibility
   toggleDropdown() {
-    this.isOpen = !this.isOpen;
+    this.isOpen.update((v) => !v);
   }
 
   // Sets the selected language and closes the dropdown
   selectLanguage(language: { code: string; label: string }) {
-    this.selectedLanguage = language;
-    this.isOpen = false; // Close the dropdown
+    this.selectedLanguage.set(language);
+    this.isOpen.set(false); // Close the dropdown
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(ev: MouseEvent) {
+    if (!this.isOpen()) return;
+    const target = ev.target as Node | null;
+    if (target && !this.host.nativeElement.contains(target)) {
+      this.isOpen.set(false);
+    }
   }
 }
 
