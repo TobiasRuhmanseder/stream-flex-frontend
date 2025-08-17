@@ -1,0 +1,15 @@
+<div class="user-menu">
+    <button type="button" class="user-trigger" (click)="toggleDropdown()" aria-haspopup="menu"
+        [attr.aria-expanded]="isOpen()" aria-label="Account menu">
+        <img src="assets/icons/user.svg" alt="" />
+    </button>
+
+    @if (isOpen()) {
+    <ul class="menu-options open" role="menu">
+        <li role="menuitem" (click)="signOut()">
+            <img class="menu-icon" src="assets/icons/logout.svg" alt="" />
+            <span>Logout</span>
+        </li>
+    </ul>
+    }
+</div>

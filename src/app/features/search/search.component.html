@@ -1,0 +1,15 @@
+<div class="search-container" [class.open]="searchOpen()">
+    <button type="button" class="search-toggle" aria-label="Search" (click)="onSearchIconClick($event)">
+        <img src="assets/icons/lupe.svg" alt="lupe symbol" />
+    </button>
+    <form class="search-form" (submit)="$event.preventDefault(); submitSearch()">
+        <input #q id="header-search" type="text" [value]="search()" (input)="search.set(($any($event.target)).value)"
+            (blur)="onSearchBlur()" placeholder="titel, genres" autocomplete="off" aria-label="search" />
+        @if(search().trim()){
+        <button type="button" class="clear-btn" aria-label="clear search" (mousedown)="$event.preventDefault()"
+            (click)="clearSearch(q)">
+            <img src="assets/icons/close.svg" alt="image close" />
+        </button>
+        }
+    </form>
+</div>
