@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { HeaderMenuComponent } from './header-menu/header-menu.component';
+import { RouterModule } from "@angular/router";
 
 
 @Component({
   selector: 'app-dashboard',
-  imports: [HeaderMenuComponent],
+  imports: [HeaderMenuComponent, RouterModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })

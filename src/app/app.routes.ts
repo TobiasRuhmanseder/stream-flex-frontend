@@ -10,6 +10,7 @@ import { guestOnly } from './guards/guest-only.guard';
 import { VerifyEmailComponent } from './home/verify-email/verify-email.component';
 import { ForgotPasswordComponent } from './home/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './home/reset-password/reset-password.component';
+import { StartComponent } from './dashboard/start/start.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home/lets-go', pathMatch: 'full' },
@@ -25,9 +26,15 @@ export const routes: Routes = [
             { path: 'sign-up-success', component: SignUpSuccessComponent },
             { path: 'verify-email', component: VerifyEmailComponent },
             { path: 'password-forgot', component: ForgotPasswordComponent },
-            { path: 'password-reset', component: ResetPasswordComponent},
+            { path: 'password-reset', component: ResetPasswordComponent },
         ]
     },
-    { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
+    {
+        path: 'dashboard', component: DashboardComponent, canActivate: [authGuard],
+        children: [
+            { path: '', redirectTo: 'start', pathMatch: 'full' }, // Default-Child-Redirect
+            { path: 'start', component: StartComponent },
+        ]
+    },
     { path: '**', redirectTo: 'home/lets-go' }
 ]
