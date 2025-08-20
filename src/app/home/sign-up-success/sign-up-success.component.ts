@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './sign-up-success.component.scss'
 })
 export class SignUpSuccessComponent implements OnInit {
-  public email: String = '';
+  public email: string = '';
 
 
   constructor(private route: ActivatedRoute) {

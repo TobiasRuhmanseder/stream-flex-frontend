@@ -1,3 +1,13 @@
-<div class="hero-view">
-    <img src="assets/img/hero_image.jpg" alt="image hero">
+<div class="hero-view" >
+    @if(showImage()&& imageUrl()){
+    <img [src]="imageUrl()" alt="hero image">
+    }
+    @if(videoUrl()){
+    <video #teaser [src]="videoUrl()" autoplay muted playsinline (canplay)="onCanPlay()" (ended)="ended.emit()"></video>
+    }
+
+    <div class="overlay">
+        <!-- <h1>{{ title() }}</h1> logo -->
+        <button type="button" (click)="play.emit()">Play</button>
+    </div>
 </div>

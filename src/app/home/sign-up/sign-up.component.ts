@@ -71,7 +71,7 @@ export class SignUpComponent implements OnInit {
     if (this.signupForm.invalid) return
     const email = this.emailControl.value
     const password = this.passwordControl.value
-
+    
     this.recaptchaService.getToken('signup')
       .pipe(
         switchMap(token => this.authService.signUp({ email, password, recaptchaToken: token })),

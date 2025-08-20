@@ -1,1 +1,11 @@
-<app-hero-view></app-hero-view>
+@if(loading()){
+<div>Loading...</div>
+}
+
+@if(!loading() && current()){
+<div class="hero-fader" [class.is-fading]="isFading()">
+    <app-hero-view [imageUrl]="imageUrl()" [videoUrl]="teaserUrl()" [title]="current()?.title"
+        (play)="onPlayRequested()" (ended)="onEnded()" (canPlayReady)="onCanPlayReady()">
+    </app-hero-view>
+</div>
+}

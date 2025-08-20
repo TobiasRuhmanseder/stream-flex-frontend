@@ -1,0 +1,9 @@
+.hero-fader {
+    opacity: 1;
+    transition: opacity 1200ms ease;
+    will-change: opacity;
+}
+
+.hero-fader.is-fading {
+    opacity: 0;
+}
