@@ -1,13 +1,20 @@
-<div class="hero-view" >
+<div class="hero-view">
     @if(showImage()&& imageUrl()){
     <img [src]="imageUrl()" alt="hero image">
     }
-    @if(videoUrl()){
-    <video #teaser [src]="videoUrl()" autoplay muted playsinline (canplay)="onCanPlay()" (ended)="ended.emit()"></video>
+    @if(videoUrl() && !showImage()){
+    <video #teaser [src]="videoUrl()" autoplay muted playsinline (canplay)="onCanPlay()" (error)="onVideoError($event)"
+        (ended)="ended.emit()"></video>
     }
-
     <div class="overlay">
-        <!-- <h1>{{ title() }}</h1> logo -->
-        <button type="button" (click)="play.emit()">Play</button>
+        <img class="img-logo" [src]="logoUrl()" alt="movie logo">
+        <button class="bttn-white bttn-width mr-1rem" type="button" (click)="play.emit()">
+            <img src="assets/icons/play.svg" alt="">
+            Abspielen
+        </button>
+        <button class="bttn-grey bttn-width" type="button" (click)="play.emit()">
+            <img src="assets/icons/info.svg" alt="">
+            Weitere Infos
+        </button>
     </div>
 </div>

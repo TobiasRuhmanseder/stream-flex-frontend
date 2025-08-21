@@ -1,11 +1,11 @@
-@if(loading()){
-<div>Loading...</div>
-}
-
 @if(!loading() && current()){
 <div class="hero-fader" [class.is-fading]="isFading()">
-    <app-hero-view [imageUrl]="imageUrl()" [videoUrl]="teaserUrl()" [title]="current()?.title"
+    <app-hero-view [imageUrl]="imageUrl()" [videoUrl]="teaserUrl()" [title]="current()?.title" [logoUrl]="logoUrl()"
         (play)="onPlayRequested()" (ended)="onEnded()" (canPlayReady)="onCanPlayReady()">
     </app-hero-view>
+</div>
+<div class="dots" *ngIf="heroes().length > 1">
+    <button *ngFor="let h of heroes(); let i = index" type="button" [class.active]="i === idx()" (click)="applyHero(i)">
+    </button>
 </div>
 }

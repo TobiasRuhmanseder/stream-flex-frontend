@@ -58,6 +58,66 @@ h2 {
     }
 }
 
+.bttn-white {
+    text-decoration: none;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+    border: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+    font-weight: 700;
+    font-size: 1.2rem;
+    transition: all 125ms ease-in-out;
+
+    img {
+        width: 2.2rem !important;
+        height: auto !important;
+        margin-right: 0.5rem;
+    }
+
+    &:hover {
+        background-color: lightgrey;
+        transition: all 225ms ease-in-out;
+    }
+}
+
+.bttn-grey {
+    text-decoration: none;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+    border: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: grey;
+    color: white;
+    font-weight: 700;
+    font-size: 1.2rem;
+    transition: all 125ms ease-in-out;
+
+    img {
+        width: 2.2rem !important;
+        height: auto !important;
+        margin-right: 0.5rem;
+    }
+
+    &:hover {
+        background-color: lightgrey;
+        transition: all 225ms ease-in-out;
+    }
+}
+
 .sign-dialog {
     background-color: rgba(0, 0, 0, 0.7);
     border-radius: 4px;

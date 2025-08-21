@@ -18,10 +18,11 @@ export const routes: Routes = [
         path: 'home',
         component: HomeComponent,
         canMatch: [guestOnly],
+        data: { animation: 'home' },
         children: [
             { path: '', redirectTo: 'lets-go', pathMatch: 'full' }, // Default-Child-Redirect
             { path: 'lets-go', component: LetsGoComponent },
-            { path: 'sign-in', component: SignInComponent },
+            { path: 'sign-in', component: SignInComponent, },
             { path: 'sign-up', component: SignUpComponent },
             { path: 'sign-up-success', component: SignUpSuccessComponent },
             { path: 'verify-email', component: VerifyEmailComponent },
@@ -31,6 +32,7 @@ export const routes: Routes = [
     },
     {
         path: 'dashboard', component: DashboardComponent, canActivate: [authGuard],
+        data: { animation: 'dashboard' },
         children: [
             { path: '', redirectTo: 'start', pathMatch: 'full' }, // Default-Child-Redirect
             { path: 'start', component: StartComponent },

@@ -7,3 +7,26 @@
 .hero-fader.is-fading {
     opacity: 0;
 }
+
+.dots {
+    display: flex;
+    gap: .5rem;
+    justify-content: center;
+    margin-top: -2rem;
+
+    button {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        border: 0;
+        background: #424242;
+        opacity: .6;
+        cursor: pointer;
+
+        &.active {
+            background: #fff;
+            opacity: 1;
+            transform: scale(1.15);
+        }
+    }
+}

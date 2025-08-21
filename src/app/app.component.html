@@ -1,3 +1,5 @@
 <app-loading-overlay [visible]=loadingOverlayService.isLoading()></app-loading-overlay>
 <app-signal-notification></app-signal-notification>
-<router-outlet></router-outlet>
+<main [@routeTransition]="getState(outlet)">
+    <router-outlet #outlet="outlet"></router-outlet>
+</main>

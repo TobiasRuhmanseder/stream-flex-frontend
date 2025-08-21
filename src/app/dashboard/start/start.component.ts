@@ -1,10 +1,11 @@
 import { Component, computed, OnInit, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeroViewComponent } from "./hero-view/hero-view.component";
-import { Movie } from 'src/app/models/movie.interface';
 import { MovieService } from 'src/app/services/movie.service';
 import { NotificationSignalsService } from 'src/app/services/notification-signals.service';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
+import { catchError, EMPTY, throwError } from 'rxjs';
 
 
 
@@ -27,17 +28,17 @@ export class StartComponent implements OnInit {
 
   imageUrl = signal<string | null>(null);
   teaserUrl = signal<string | null>(null);
+  logoUrl = signal<string | null>(null);
 
   @ViewChild(HeroViewComponent) heroView?: HeroViewComponent;
 
-  constructor(private movieService: MovieService, private notifyService: NotificationSignalsService, private router: Router) { }
+  constructor(private movieService: MovieService, private notifyService: NotificationSignalsService, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.movieService.getHeroes(3).subscribe({
       next: (arr) => {
         const heroes = Array.isArray(arr) ? arr.filter(Boolean) : [];
         this.heroes.set(heroes);
-        
         this.loading.set(false);
         if (!heroes.length) return;
         this.applyHero(0);
@@ -49,30 +50,34 @@ export class StartComponent implements OnInit {
     });
   }
 
-  private applyHero(i: number) {
+  applyHero(i: number) {
     const arr = this.heroes();
     if (!arr.length) return;
     this.idx.set(i);
     const hero = arr[i % arr.length];
     const id = hero.id as number;
 
-    this.imageUrl.set(this.movieService.thumbnailUrl(id)); // oder logoUrl()
-    this.teaserUrl.set(this.movieService.teaserUrl(id));
+    this.authService.ensureFreshAccessWithoutLoadingIntcr().pipe(catchError((err) => {
+      this.imageUrl.set(this.movieService.thumbnailUrl(id));
+      return err
+    })).subscribe(() => {
+      this.logoUrl.set(this.movieService.logoUrl(id));
+      this.teaserUrl.set(this.movieService.teaserUrl(id));
+      this.imageUrl.set(this.movieService.thumbnailUrl(id));
+    });
   }
 
-  // Wird vom HeroView (video ended) ausgelöst
   onEnded() {
     this.isFading.set(true);
     const next = (this.idx() + 1) % this.heroes().length;
     setTimeout(() => {
-      this.isFading.set(false);
       this.applyHero(next);
     }, 1200);
   }
 
 
   onCanPlayReady() {
-    this.heroView?.fading.set(false);
+    requestAnimationFrame(() => this.isFading.set(false));
   }
 
   onPlayRequested() {
@@ -80,5 +85,6 @@ export class StartComponent implements OnInit {
     if (!h) return;
     this.router.navigate(['/player', h.id]); // späterer vollwertiger Player
   }
+
 }
 

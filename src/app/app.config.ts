@@ -8,11 +8,10 @@ import { httpErrorInterceptor } from './interceptor/http-error.interceptor';
 import { loadingInterceptor } from './interceptor/loading-interceptor';
 import { csrfInterceptor } from './interceptor/csrf.interceptor';
 
+
 function initializeApp(): void | Promise<void> {
   return inject(AuthService).init();
-
 }
-
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,5 +24,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimations(),
     provideExperimentalZonelessChangeDetection(),
+
   ]
 };
