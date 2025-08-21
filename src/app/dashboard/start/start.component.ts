@@ -5,13 +5,16 @@ import { MovieService } from 'src/app/services/movie.service';
 import { NotificationSignalsService } from 'src/app/services/notification-signals.service';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import { catchError, EMPTY, throwError } from 'rxjs';
+import { catchError, EMPTY, from, map, mergeMap, of, throwError, toArray } from 'rxjs';
+import { Movie } from 'src/app/models/movie.interface';
+import { Genre } from 'src/app/models/genre.interface';
+import { SlideRowComponent } from '../slide-row/slide-row.component';
 
 
 
 @Component({
   selector: 'app-start',
-  imports: [CommonModule, HeroViewComponent],
+  imports: [CommonModule, HeroViewComponent, SlideRowComponent],
   templateUrl: './start.component.html',
   styleUrl: './start.component.scss'
 })
@@ -20,6 +23,9 @@ export class StartComponent implements OnInit {
   heroes = signal<any[]>([]);
   idx = signal(0);
   isFading = signal(false);
+
+  rows = signal<{ title: string; items: Movie[] }[]>([]);
+  loadingRows = signal(true);
 
   current = computed(() => {
     const arr = this.heroes();
@@ -48,6 +54,29 @@ export class StartComponent implements OnInit {
         this.notifyService.showKey('http.unexpected', 'error');
       }
     });
+    this.getGenreAndMovies();
+  }
+
+  getGenreAndMovies() {
+    this.movieService.getGenres().pipe(
+      mergeMap((genres: Genre[]) => {
+        if (!Array.isArray(genres) || !genres.length) return of([] as { title: string; items: Movie[] }[]);
+        return from(genres).pipe(
+          mergeMap(g =>
+            this.movieService.getMoviesByGenre(g.slug).pipe(
+              map(items => ({ title: g.name, items: items ?? [] })),
+              catchError(() => of({ title: g.name, items: [] }))
+            ),
+            4 // Concurrency
+          ),
+          toArray(),
+          map(rows => rows.filter(r => r.items.length > 0))
+        );
+      })
+    ).subscribe({
+      next: rows => { this.rows.set(rows); this.loadingRows.set(false); },
+      error: () => this.loadingRows.set(false)
+    });
   }
 
   applyHero(i: number) {
@@ -62,7 +91,7 @@ export class StartComponent implements OnInit {
       return err
     })).subscribe(() => {
       this.logoUrl.set(this.movieService.logoUrl(id));
-      this.teaserUrl.set(this.movieService.teaserUrl(id));
+      this.teaserUrl.set(this.movieService.teaserUrl(100));
       this.imageUrl.set(this.movieService.thumbnailUrl(id));
     });
   }

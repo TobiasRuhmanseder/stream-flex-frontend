@@ -15,7 +15,6 @@ export interface Movie {
     hero_image: string | null;
     thumbnail_image: string | null;
     
-
     genres?: Genre[];
     created_at: string;
 }

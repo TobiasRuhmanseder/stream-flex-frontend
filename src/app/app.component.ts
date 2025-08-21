@@ -8,7 +8,7 @@ import { trigger, transition, style, animate, group, query } from '@angular/anim
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SignalNotificationComponent, LoadingOverlayComponent],
+  imports: [RouterOutlet, SignalNotificationComponent, LoadingOverlayComponent, ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   animations: [

@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideExperimentalZonelessChangeDetection, provideAppInitializer, inject } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { AuthService } from './services/auth.service';
@@ -21,7 +21,13 @@ export const appConfig: ApplicationConfig = {
         headerName: 'X-CSRFToken',
       })),
     provideAppInitializer(initializeApp),
-    provideRouter(routes),
+    provideRouter(
+      routes,
+      withInMemoryScrolling({
+        anchorScrolling: 'enabled',
+        scrollPositionRestoration: 'enabled',
+      })
+    ),
     provideAnimations(),
     provideExperimentalZonelessChangeDetection(),
 
