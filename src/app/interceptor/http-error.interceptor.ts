@@ -52,8 +52,8 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
               return next(req);
             }
             // no refresh possible - optionally logout + toast (not in silent mode)
-            if (silent) return EMPTY;
             authService.signOut();
+            if (silent) return EMPTY;
             notifyService.showKey('auth.sessionExpired');
             return throwError(() => error);
           }),

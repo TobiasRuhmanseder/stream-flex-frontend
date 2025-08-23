@@ -1,16 +1,26 @@
-<div class="container">
-    <div class="handle left-handle"></div>
-    <div class="slider">
-        <img src="https://placehold.co/210?text=1" alt="">
-        <img src="https://placehold.co/220?text=2" alt="">
-        <img src="https://placehold.co/230?text=3" alt="">
-        <img src="https://placehold.co/240?text=4" alt="">
-        <img src="https://placehold.co/250?text=5" alt="">
-        <img src="https://placehold.co/260?text=6" alt="">
-        <img src="https://placehold.co/270?text=7" alt="">
-        <img src="https://placehold.co/280?text=8" alt="">
-        <img src="https://placehold.co/290?text=9" alt="">
+<div class="row">
+    <div class="row-header">
+
+        <h2 class="title">Genre - Movie - Show</h2>
+        <div class="progress-bar">
+            @for (_ of stepDots(); track $index) {
+            <div class="dot" [class.active]="index()===$index "></div>
+            }
+        </div>
     </div>
-    <div class="handle right-handle"></div>
-    <div class="test"></div>
+</div>
+<div class="container">
+    <button class="handle left-handle" [class.d-none]="index()===0" (click)="prev()"></button>
+    <div class="slider" [style.--cards-per-screen]="cardsPerView()" [style.--slider-index]="index()">
+        @for (image of images(); track $index) {
+        <div class="image-wrapper">
+            <img [src]="image" alt="" />
+            <div class="button-wrapper">
+                <img class="play-button" src="assets/icons/play.svg" alt="">
+                <img class="info-button" src="assets/icons/info.svg" alt="">
+            </div>
+        </div>
+        }
+    </div>
+    <button class="handle right-handle" (click)="next()" [class.d-none]="(index()+1)===steps()"></button>
 </div>

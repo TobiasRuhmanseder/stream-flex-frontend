@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { CheckEmailResponse, SignUpRequest, CheckEmailRequest, SignUpResponse, User, SignInRequest, SignInResponse, PasswordResetConfirmRequest, PasswordResetRequest } from '../models/user.interfaces';
 import { catchError, lastValueFrom, map, mapTo, Observable, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -12,6 +12,11 @@ const STORAGE_KEY = 'sf_maybeLoggedIn';
   providedIn: 'root'
 })
 export class AuthService {
+  // =================http-context's Info========================
+
+  // SILENT_AUTH_CHECK: no toast/console on unauthenticated /me
+  // SKIP_AUTH_REFRESH: do not attempt interceptor refresh for this request
+  //look at the http-error.tokens.ts file for more informations
 
   private _user = signal<User | null>(null);
   readonly user = this._user.asReadonly();
@@ -31,9 +36,10 @@ export class AuthService {
   private passwordResetUrl = `${this.base}/users/password-reset/`;
   private passwordResetConfirmUrl = `${this.base}/users/password-reset/confirm/`;
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient) {
     this.storageSync();
   }
+
 
   /** Syncs the maybeLoggedIn hint with localStorage and across tabs. */
   storageSync(): void {
@@ -69,7 +75,6 @@ export class AuthService {
   // look at the app.config.ts - initializeApp()
   init(): Promise<void> {
     const silentCtx = new HttpContext().set(SILENT_AUTH_CHECK, true);
-
     const csrf$ = this.http.get(this.getCsrfUrl, { withCredentials: true });
     const maybeMe$ = this.maybeLoggedIn()
       ? this.http.get<User>(this.geMeUrl, { withCredentials: true, context: silentCtx }).pipe(
@@ -78,15 +83,9 @@ export class AuthService {
         map(() => void 0)
       )
       : of(void 0);
-
     const init$ = csrf$.pipe(switchMap(() => maybeMe$));
     return lastValueFrom(init$);
   }
-
-  // SILENT_AUTH_CHECK: no toast/console on unauthenticated /me
-  // SKIP_AUTH_REFRESH: do not attempt interceptor refresh for this request
-  //look at the http-error.tokens.ts file for more informations
-
 
   ensureUser(): Observable<User | null> {
     const user = this._user();
@@ -122,15 +121,15 @@ export class AuthService {
    * This method self-subscribes because it is often called from interceptors.
    */
   signOut(): void {
+    this.clearLoggedInHint();
     const context = new HttpContext().set(SKIP_AUTH_REFRESH, true);
-
     this.http.post(this.signOutUrl, {}, { withCredentials: true, context }).subscribe({
       next: () => { },
-      error: () => { },
+      error: () => {
+      },
       complete: () => {
         this._user.set(null);
-        this.clearLoggedInHint();
-        this.router.navigate(['/login']);
+        window.location.reload();
       },
     });
   }
@@ -138,7 +137,7 @@ export class AuthService {
   /** Clears user state locally without calling the backend (used when refresh fails). */
   forceLogoutLocal(): void {
     this._user.set(null);
-    this.router.navigate(['/login']);
+    this.clearLoggedInHint();
   }
 
   checkEmailExist(data: CheckEmailRequest): Observable<CheckEmailResponse> {
