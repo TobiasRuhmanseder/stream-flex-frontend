@@ -4,15 +4,17 @@
         (play)="onPlayRequested()" (ended)="onEnded()" (canPlayReady)="onCanPlayReady()">
     </app-hero-view>
 </div>
-<div class="dots" *ngIf="heroes().length > 1">
-    <button *ngFor="let h of heroes(); let i = index" type="button" [class.active]="i === idx()" (click)="applyHero(i)">
+@if (heroes().length > 1) {
+<div class="dots">
+    @for (h of heroes(); track h; let i = $index) {
+    <button type="button" [class.active]="i === idx()" (click)="applyHero(i)">
     </button>
+    }
 </div>
 }
-
-<app-slide-row></app-slide-row>
-<!-- <section class="rows" *ngIf="!loadingRows()">
-    <ng-container *ngFor="let r of rows()">
-        <app-slide-row></app-slide-row>
-    </ng-container>
-</section> -->
+}
+<section class="rows" *ngIf="!loadingRows() && (rows()?.length ?? 0) > 0">
+    @for (row of rows(); track row.genre) {
+    <app-slide-row [row]="row"></app-slide-row>
+    }
+</section>

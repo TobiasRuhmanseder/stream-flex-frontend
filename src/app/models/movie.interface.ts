@@ -18,3 +18,8 @@ export interface Movie {
     genres?: Genre[];
     created_at: string;
 }
+
+export interface Row {
+    genre: string;
+    movies: Movie[] | [];
+}

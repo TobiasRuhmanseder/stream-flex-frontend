@@ -1,7 +1,7 @@
 <div class="row">
     <div class="row-header">
 
-        <h2 class="title">Genre - Movie - Show</h2>
+        <h2 class="title">{{row()!.genre}}</h2>
         <div class="progress-bar">
             @for (_ of stepDots(); track $index) {
             <div class="dot" [class.active]="index()===$index "></div>
@@ -12,12 +12,13 @@
 <div class="container">
     <button class="handle left-handle" [class.d-none]="index()===0" (click)="prev()"></button>
     <div class="slider" [style.--cards-per-screen]="cardsPerView()" [style.--slider-index]="index()">
-        @for (image of images(); track $index) {
+        @for (movie of row()!.movies; track movie.id) {
         <div class="image-wrapper">
-            <img [src]="image" alt="" />
+            <img [src]="movie.thumbnail_image" alt="" />
             <div class="button-wrapper">
-                <img class="play-button" src="assets/icons/play.svg" alt="">
-                <img class="info-button" src="assets/icons/info.svg" alt="">
+                <img class="play-button" src="assets/icons/play.svg" (click)="playMovie(movie.id)" alt="play button">
+                <img class="info-button" src="assets/icons/info.svg" (click)="openOverlayMovieInfo(movie)" click
+                    alt="info button">
             </div>
         </div>
         }

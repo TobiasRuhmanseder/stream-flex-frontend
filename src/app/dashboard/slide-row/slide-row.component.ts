@@ -1,6 +1,6 @@
 import { Component, computed, effect, ElementRef, inject, input, signal, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Movie } from 'src/app/models/movie.interface';
+import { Movie, Row } from 'src/app/models/movie.interface';
 import { SlideMovieCardComponent } from "./slide-movie-card/slide-movie-card.component";
 import { RouterLink } from '@angular/router';
 import { SliderService } from 'src/app/services/slider.service';
@@ -16,7 +16,10 @@ type Mode = 'desktop' | 'snap';
   styleUrl: './slide-row.component.scss'
 })
 export class SlideRowComponent {
-  // deine 9 Bilder (gern später aus dem Backend)
+
+  row = input<Row | null>(null);
+
+
   images = signal([
     'https://placehold.co/210/orange/white/?text=1',
     'https://placehold.co/220/orange/white/?text=2',
@@ -50,5 +53,14 @@ export class SlideRowComponent {
     return steps
   }
 
+  playMovie(id: number) {
+    console.log('play');
+
+  }
+
+  openOverlayMovieInfo(movie: Movie) {
+    console.log('info');
+
+  }
 }
 

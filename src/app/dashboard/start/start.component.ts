@@ -6,7 +6,7 @@ import { NotificationSignalsService } from 'src/app/services/notification-signal
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { catchError, EMPTY, from, map, mergeMap, of, throwError, toArray } from 'rxjs';
-import { Movie } from 'src/app/models/movie.interface';
+import { Movie, Row } from 'src/app/models/movie.interface';
 import { Genre } from 'src/app/models/genre.interface';
 import { SlideRowComponent } from '../slide-row/slide-row.component';
 
@@ -24,7 +24,7 @@ export class StartComponent implements OnInit {
   idx = signal(0);
   isFading = signal(false);
 
-  rows = signal<{ title: string; items: Movie[] }[]>([]);
+  rows = signal<Row[]>([]);
   loadingRows = signal(true);
 
   current = computed(() => {
@@ -41,12 +41,16 @@ export class StartComponent implements OnInit {
   constructor(private movieService: MovieService, private notifyService: NotificationSignalsService, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
+    this.getHeroes();
+    this.getGenreAndMovies();
+  }
+
+  getHeroes() {
     this.movieService.getHeroes(3).subscribe({
       next: (arr) => {
-        const heroes = Array.isArray(arr) ? arr.filter(Boolean) : [];
-        this.heroes.set(heroes);
+        this.heroes.set(arr);
         this.loading.set(false);
-        if (!heroes.length) return;
+        if (!arr.length) return;
         this.applyHero(0);
       },
       error: () => {
@@ -54,27 +58,26 @@ export class StartComponent implements OnInit {
         this.notifyService.showKey('http.unexpected', 'error');
       }
     });
-    this.getGenreAndMovies();
   }
 
   getGenreAndMovies() {
     this.movieService.getGenres().pipe(
       mergeMap((genres: Genre[]) => {
-        if (!Array.isArray(genres) || !genres.length) return of([] as { title: string; items: Movie[] }[]);
         return from(genres).pipe(
-          mergeMap(g =>
-            this.movieService.getMoviesByGenre(g.slug).pipe(
-              map(items => ({ title: g.name, items: items ?? [] })),
-              catchError(() => of({ title: g.name, items: [] }))
+          mergeMap(genres =>
+            this.movieService.getMoviesByGenre(genres.slug).pipe(
+              map(movies => ({ genre: genres.name, movies: movies })),
+              catchError(() => of({ genre: genres.name, movies: [] as Movie[] } as Row))
             ),
-            4 // Concurrency
           ),
           toArray(),
-          map(rows => rows.filter(r => r.items.length > 0))
+          map(rows => rows.filter(r => r.movies.length > 0))
         );
       })
     ).subscribe({
-      next: rows => { this.rows.set(rows); this.loadingRows.set(false); },
+      next: rows => {
+        this.rows.set(rows); this.loadingRows.set(false);
+      },
       error: () => this.loadingRows.set(false)
     });
   }
@@ -91,7 +94,7 @@ export class StartComponent implements OnInit {
       return err
     })).subscribe(() => {
       this.logoUrl.set(this.movieService.logoUrl(id));
-      this.teaserUrl.set(this.movieService.teaserUrl(100));
+      this.teaserUrl.set(this.movieService.teaserUrl(id));
       this.imageUrl.set(this.movieService.thumbnailUrl(id));
     });
   }
@@ -103,7 +106,6 @@ export class StartComponent implements OnInit {
       this.applyHero(next);
     }, 1200);
   }
-
 
   onCanPlayReady() {
     requestAnimationFrame(() => this.isFading.set(false));
