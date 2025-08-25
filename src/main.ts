@@ -10,18 +10,6 @@ if (environment.production) {
 }
 else console.log('dev - mode enable - look at the main.ts and environment.ts file');
 
-if (environment.recaptchaEnabled) {
-  const script = document.createElement('script');
-  script.src = `https://www.google.com/recaptcha/api.js?render=${environment.recaptchaSiteKey}`;
-  script.async = true;
-  script.defer = true;
-  script.onerror = () => {
-    console.error('reCAPTCHA-Script can not be loaded');
-    (window as any).grecaptchaLoadFailed = true;
-  };
-  document.head.appendChild(script);
-}
-
 
 bootstrapApplication(AppComponent, appConfig)
   .catch((err) => console.error(err));

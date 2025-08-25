@@ -11,6 +11,7 @@ import { VerifyEmailComponent } from './home/verify-email/verify-email.component
 import { ForgotPasswordComponent } from './home/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './home/reset-password/reset-password.component';
 import { StartComponent } from './dashboard/start/start.component';
+import { PlayerComponent } from './player/player.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home/lets-go', pathMatch: 'full' },
@@ -38,5 +39,6 @@ export const routes: Routes = [
             { path: 'start', component: StartComponent },
         ]
     },
+    { path: 'player', component: PlayerComponent, canActivate: [authGuard], data: { animation: 'player' } },
     { path: '**', redirectTo: 'home/lets-go' }
 ]

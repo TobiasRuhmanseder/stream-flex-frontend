@@ -129,7 +129,7 @@ export class AuthService {
       },
       complete: () => {
         this._user.set(null);
-        window.location.reload();
+        // window.location.reload();
       },
     });
   }

@@ -30,6 +30,5 @@ export const appConfig: ApplicationConfig = {
     ),
     provideAnimations(),
     provideExperimentalZonelessChangeDetection(),
-
   ]
 };

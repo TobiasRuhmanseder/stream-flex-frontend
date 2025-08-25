@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LanguageDropdownComponent } from '../features/language-dropdown/language-dropdown.component';
 import { RouterOutlet, RouterLink, RouterModule, ActivatedRoute } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { environment } from 'src/environments/environment';
+import { RecaptchaService } from '../services/recaptcha.service';
 
 
 @Component({
@@ -20,12 +22,22 @@ import { trigger, transition, style, animate } from '@angular/animations';
     ])
   ]
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit, OnDestroy {
+  private scriptEl?: HTMLScriptElement;
 
-  constructor(private activatedRoute: ActivatedRoute) {
+  constructor(private activatedRoute: ActivatedRoute, private recaptchaService: RecaptchaService) { }
+
+  ngOnInit(): void {
+    this.recaptchaService.load();
+  }
+
+  ngOnDestroy(): void {
+    this.recaptchaService.unload();
   }
 
   getRouteAnimationData() {
     return this.activatedRoute.firstChild?.snapshot.routeConfig?.path;
   }
+
+
 }

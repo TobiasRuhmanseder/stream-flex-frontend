@@ -8,8 +8,6 @@ export class SliderService implements OnDestroy {
 
   readonly itemsPerScreen = computed(() => {
     const w = this.width();
-    console.log('test log');
-    
     if (w <= 500) return 2;
     if (w <= 800) return 3;
     if (w <= 1100) return 4;

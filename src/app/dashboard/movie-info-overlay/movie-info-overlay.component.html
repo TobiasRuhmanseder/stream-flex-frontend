@@ -1,1 +1,16 @@
-<p>movie-info-overlay works!</p>
+@if(show){
+<div @fadeInOut (@fadeInOut.done)="onAnimDone($event)" class=" overlay">
+    <div class="video-wrapper">
+        <video #teaser [src]="movie.teaser_video" autoplay muted loop></video>
+    </div>
+    <div class="info-container">
+        <h2>{{movie.title}}</h2>
+        <span class="description"> {{movie.description}}</span>
+    </div>
+    <button class="bttn-white bttn-width pa" type="button" (click)="playMovie()">
+        <img src="assets/icons/play.svg" alt="">
+        Abspielen
+    </button>
+    <img class="close" src="assets/icons/close.svg" (click)="close()" alt="">
+</div>
+}

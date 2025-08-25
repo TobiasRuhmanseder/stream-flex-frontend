@@ -1,20 +1,20 @@
 <div class="hero-view">
-    @if(showImage()&& imageUrl()){
-    <img [src]="imageUrl()" alt="hero image">
+    @if(currentHero()?.hero_image && currentHero()?.teaser_video){
+    @if(!currentHero()?.teaser_video){
+    <img [src]="currentHero()?.hero_image" alt="hero image">
     }
-    @if(videoUrl() && !showImage()){
-    <video #teaser [src]="videoUrl()" autoplay muted playsinline (canplay)="onCanPlay()" (error)="onVideoError($event)"
-        (ended)="ended.emit()"></video>
-    }
+    <video #teaser [src]="currentHero()?.teaser_video" autoplay muted playsinline (canplay)="onCanPlay()"
+        (ended)="ended.emit()" preload="auto"></video>
     <div class="overlay">
-        <img class="img-logo" [src]="logoUrl()" alt="movie logo">
+        <img class="img-logo" [src]="currentHero()?.logo" alt="movie logo">
         <button class="bttn-white bttn-width mr-1rem" type="button" (click)="play.emit()">
             <img src="assets/icons/play.svg" alt="">
             Abspielen
         </button>
-        <button class="bttn-grey bttn-width" type="button" (click)="play.emit()">
+        <button class="bttn-grey bttn-width" type="button" (click)="openOverlayMovieInfo(currentHero())">
             <img src="assets/icons/info.svg" alt="">
             Weitere Infos
         </button>
     </div>
+    }
 </div>

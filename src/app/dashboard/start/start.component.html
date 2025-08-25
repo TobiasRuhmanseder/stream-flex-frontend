@@ -1,8 +1,7 @@
-@if(!loading() && current()){
+@if(!loading() && currentHero()){
 <div class="hero-fader" [class.is-fading]="isFading()">
-    <app-hero-view [imageUrl]="imageUrl()" [videoUrl]="teaserUrl()" [title]="current()?.title" [logoUrl]="logoUrl()"
-        (play)="onPlayRequested()" (ended)="onEnded()" (canPlayReady)="onCanPlayReady()">
-    </app-hero-view>
+    <app-hero-view [currentHero]="currentHero()" (play)="onPlayRequested()" (ended)="onEnded()"
+        (canPlayReady)="onCanPlayReady()"></app-hero-view>
 </div>
 @if (heroes().length > 1) {
 <div class="dots">

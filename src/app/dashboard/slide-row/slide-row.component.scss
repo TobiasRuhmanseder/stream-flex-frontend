@@ -15,29 +15,30 @@
 }
 
 .row {
-    padding-top: 4rem;
+    padding-top: .5rem;
     padding-left: calc(var(--slider-padding) + 1rem);
     padding-right: calc(var(--slider-padding) + 1rem);
-    padding-bottom: 1rem;
+    padding-bottom: .5rem;
 
     .row-header {
         display: flex;
         justify-content: space-between;
         align-items: end;
-
     }
 
     .title {
+        z-index: 20;
         margin: 0;
     }
 
     .progress-bar {
         display: flex;
-        gap: .5rem;
+        gap: .2rem;
+        z-index: 20;
 
         .dot {
-            flex: 0 0 1rem;
-            height: .3rem;
+            flex: 0 0 .8rem;
+            height: .15rem;
             border-radius: .1rem;
             background-color: rgba(255, 255, 255, .3);
         }
@@ -83,22 +84,23 @@
         height: 100%;
         object-fit: cover;
         overflow: hidden;
+        border-radius: .35rem;
 
     }
 
     .image-wrapper {
-        opacity: 0.9;
+        filter: brightness(1);
         position: relative;
         flex: 0 0 calc(100%/(var(--cards-per-screen)));
         max-width: calc(100%/var(--cards-per-screen));
         aspect-ratio: 16 / 9;
         padding: .25rem;
         object-fit: cover;
-        border-radius: .5rem;
+        border-radius: .35rem;
         overflow: hidden;
 
         &:hover {
-            opacity: 1;
+            filter: brightness(1.1);
         }
 
         &:hover .button-wrapper {
@@ -155,7 +157,6 @@
     border: none;
     border-radius: .5rem;
     min-width: var(--slider-padding);
-    background-color: red;
     z-index: 10;
     background-color: rgba(0, 0, 0, .35);
     transition: all 225ms ease-in-out;
@@ -168,6 +169,10 @@
 
 .handle.d-none::after {
     content: none !important;
+}
+
+.handle.d-none.handle {
+    background-color: transparent;
 }
 
 .left-handle {

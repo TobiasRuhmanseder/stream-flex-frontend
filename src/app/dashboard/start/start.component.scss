@@ -2,6 +2,8 @@
     opacity: 1;
     transition: opacity 1200ms ease;
     will-change: opacity;
+    margin-bottom: -14rem;
+
 }
 
 .hero-fader.is-fading {
@@ -12,12 +14,12 @@
     display: flex;
     gap: .5rem;
     justify-content: center;
-    margin-top: -2rem;
+
 
     button {
-        width: 8px;
-        height: 8px;
-        border-radius: 999px;
+        width: .8rem;
+        height: .3rem;
+        border-radius: .1rem;
         border: 0;
         background: #424242;
         opacity: .6;

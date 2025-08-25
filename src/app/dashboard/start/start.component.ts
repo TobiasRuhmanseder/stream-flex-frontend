@@ -20,23 +20,17 @@ import { SlideRowComponent } from '../slide-row/slide-row.component';
 })
 export class StartComponent implements OnInit {
   loading = signal(true);
-  heroes = signal<any[]>([]);
+  heroes = signal<Movie[]>([]);
   idx = signal(0);
   isFading = signal(false);
-
   rows = signal<Row[]>([]);
   loadingRows = signal(true);
 
-  current = computed(() => {
+  currentHero = computed(() => {
     const arr = this.heroes();
     return arr.length ? arr[this.idx() % arr.length] : null;
   });
 
-  imageUrl = signal<string | null>(null);
-  teaserUrl = signal<string | null>(null);
-  logoUrl = signal<string | null>(null);
-
-  @ViewChild(HeroViewComponent) heroView?: HeroViewComponent;
 
   constructor(private movieService: MovieService, private notifyService: NotificationSignalsService, private authService: AuthService, private router: Router) { }
 
@@ -52,6 +46,7 @@ export class StartComponent implements OnInit {
         this.loading.set(false);
         if (!arr.length) return;
         this.applyHero(0);
+        console.log(this.heroes());
       },
       error: () => {
         this.loading.set(false);
@@ -88,15 +83,7 @@ export class StartComponent implements OnInit {
     this.idx.set(i);
     const hero = arr[i % arr.length];
     const id = hero.id as number;
-
-    this.authService.ensureFreshAccessWithoutLoadingIntcr().pipe(catchError((err) => {
-      this.imageUrl.set(this.movieService.thumbnailUrl(id));
-      return err
-    })).subscribe(() => {
-      this.logoUrl.set(this.movieService.logoUrl(id));
-      this.teaserUrl.set(this.movieService.teaserUrl(id));
-      this.imageUrl.set(this.movieService.thumbnailUrl(id));
-    });
+    this.authService.ensureFreshAccessWithoutLoadingIntcr().subscribe(() => { });
   }
 
   onEnded() {
@@ -104,7 +91,7 @@ export class StartComponent implements OnInit {
     const next = (this.idx() + 1) % this.heroes().length;
     setTimeout(() => {
       this.applyHero(next);
-    }, 1200);
+    }, 1000);
   }
 
   onCanPlayReady() {
@@ -112,7 +99,7 @@ export class StartComponent implements OnInit {
   }
 
   onPlayRequested() {
-    const h = this.current();
+    const h = this.currentHero();
     if (!h) return;
     this.router.navigate(['/player', h.id]); // späterer vollwertiger Player
   }

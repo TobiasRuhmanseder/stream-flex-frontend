@@ -1,4 +1,8 @@
+import { Dialog } from '@angular/cdk/dialog';
 import { Component, input, signal, ElementRef, ViewChild, EventEmitter, Output, effect, AfterViewInit, OnDestroy } from '@angular/core';
+import { MovieInfoOverlayComponent } from '../../movie-info-overlay/movie-info-overlay.component';
+import { Overlay } from '@angular/cdk/overlay';
+import { Movie } from 'src/app/models/movie.interface';
 
 @Component({
   selector: 'app-hero-view',
@@ -7,6 +11,7 @@ import { Component, input, signal, ElementRef, ViewChild, EventEmitter, Output, 
   styleUrl: './hero-view.component.scss'
 })
 export class HeroViewComponent implements AfterViewInit, OnDestroy {
+  currentHero = input<Movie | null>(null);
   imageUrl = input<string | null>(null);
   videoUrl = input<string | null>(null);
   logoUrl = input<string | null>(null);
@@ -22,7 +27,7 @@ export class HeroViewComponent implements AfterViewInit, OnDestroy {
   @ViewChild('teaser') teaser?: ElementRef<HTMLVideoElement>;
 
 
-  constructor() {
+  constructor(private dialog: Dialog, private overlay: Overlay) {
     effect(() => this.applySourceIfReady());
   }
 
@@ -34,7 +39,7 @@ export class HeroViewComponent implements AfterViewInit, OnDestroy {
     document.removeEventListener('visibilitychange', this.visHandler);
   }
 
-  private applySourceIfReady() {
+  applySourceIfReady() {
     const url = this.videoUrl();
     const teaser = this.teaser?.nativeElement;
     if (!url || !teaser) return;
@@ -42,12 +47,12 @@ export class HeroViewComponent implements AfterViewInit, OnDestroy {
     this.userGesture();
   }
 
-  private tryPlay() {
+  tryPlay() {
     const teaser = this.teaser?.nativeElement;
     if (!teaser) return;
     teaser.muted = true;
     teaser.autoplay = true;
-    teaser.play().catch(() => { /* still ignore */ });
+    teaser.play().catch(() => { });
   }
 
   onCanPlay() {
@@ -66,16 +71,16 @@ export class HeroViewComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  onVideoError(ev: Event) {
-    this.handleVideoError(ev);
-  }
 
-  private handleVideoError(ev: Event) {
-    const teaser = this.teaser?.nativeElement;
-    this.showImage.set(true);
-    if (teaser) {
-      teaser.removeAttribute('src');
-      teaser.load();
-    }
+  openOverlayMovieInfo(hero: Movie | null) {
+    this.dialog.open(MovieInfoOverlayComponent, {
+      data: hero,
+      autoFocus: '#bttn',
+      restoreFocus: true,
+      disableClose: true,
+      scrollStrategy: this.overlay.scrollStrategies.noop(),
+    });
+
   }
 }
+
