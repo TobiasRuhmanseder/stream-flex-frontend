@@ -7,6 +7,12 @@
                 alt="play button" />
             <img class="info-button" src="assets/icons/info.svg" (click)="open()" alt="info button" />
         </div>
+
+        @if(movie()?.is_favorite){
+        <img class="fav-button" src="assets/icons/favorite_yes.png" alt="favorite icon no" (click)="toogleFavorite()">
+        }@else {
+        <img class="fav-button" src="assets/icons/favorite_no.svg" alt="favorite icon no" (click)="toogleFavorite()">
+        }
         <p class="movie-title">{{ movie()?.title }}</p>
     </div>
 </ng-container>

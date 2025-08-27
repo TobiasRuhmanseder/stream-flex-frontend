@@ -26,9 +26,7 @@ export class VerifyEmailComponent implements OnInit {
     const token = qp.get('token');
     const email = qp.get('email');
     const notActivated = qp.get('notActivated');
-    console.log(email);
     
-
     if (email) this.email.set(email);
 
     if (!token) {
@@ -48,7 +46,6 @@ export class VerifyEmailComponent implements OnInit {
 
   resendVerification() {
     if (!(this.email() === '')) {
-      console.log(true);
       
       this.authService.resendVerificaton(this.email()).subscribe(() => {
         this.resend.set(true);

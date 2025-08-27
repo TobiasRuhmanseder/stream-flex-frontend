@@ -1,4 +1,4 @@
-import { Component, computed, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, computed, effect, OnInit, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeroViewComponent } from "./hero-view/hero-view.component";
 import { MovieService } from 'src/app/services/movie.service';
@@ -9,6 +9,8 @@ import { catchError, EMPTY, from, map, mergeMap, of, throwError, toArray } from 
 import { Movie, Row } from 'src/app/models/movie.interface';
 import { Genre } from 'src/app/models/genre.interface';
 import { SlideRowComponent } from '../slide-row/slide-row.component';
+import { FavoriteService } from 'src/app/services/favorite.service';
+
 
 
 
@@ -17,8 +19,6 @@ import { SlideRowComponent } from '../slide-row/slide-row.component';
   imports: [CommonModule, HeroViewComponent, SlideRowComponent],
   templateUrl: './start.component.html',
   styleUrl: './start.component.scss'
-  
-
 
 
 })
@@ -27,21 +27,38 @@ export class StartComponent implements OnInit {
   heroes = signal<Movie[]>([]);
   idx = signal(0);
   isFading = signal(false);
-  rows = signal<Row[]>([]);
   loadingRows = signal(true);
-
-  currentHero = computed(() => {
-    const arr = this.heroes();
-    return arr.length ? arr[this.idx() % arr.length] : null;
-  });
+  rows = signal<Row[]>([]);
+  viewRows = computed(() => this.patchCurrentFavoritesIntoRow());
 
 
-  constructor(private movieService: MovieService, private notifyService: NotificationSignalsService, private authService: AuthService, private router: Router) { }
+  constructor(private movieService: MovieService, private notifyService: NotificationSignalsService, private authService: AuthService, private router: Router, private favoritesService: FavoriteService) { }
+
 
   ngOnInit(): void {
     this.getHeroes();
     this.getGenreAndMovies();
   }
+
+
+  patchCurrentFavoritesIntoRow(): Row[] {
+    const favIds = this.favoritesService.favoriteIds();
+    const currentRows = this.rows();
+    if (!currentRows.length) return currentRows;
+    return currentRows.map(r => ({
+      ...r,
+      movies: r.movies.map(m => ({
+        ...m,
+        is_favorite: favIds.has(m.id as number),
+      })),
+    }));
+
+  }
+
+  currentHero = computed(() => {
+    const arr = this.heroes();
+    return arr.length ? arr[this.idx() % arr.length] : null;
+  });
 
   getHeroes() {
     this.movieService.getHeroes(3).subscribe({
@@ -50,7 +67,6 @@ export class StartComponent implements OnInit {
         this.loading.set(false);
         if (!arr.length) return;
         this.applyHero(0);
-        console.log(this.heroes());
       },
       error: () => {
         this.loading.set(false);
@@ -75,7 +91,8 @@ export class StartComponent implements OnInit {
       })
     ).subscribe({
       next: rows => {
-        this.rows.set(rows); this.loadingRows.set(false);
+        this.rows.set(rows);
+        this.loadingRows.set(false);
       },
       error: () => this.loadingRows.set(false)
     });
@@ -109,4 +126,3 @@ export class StartComponent implements OnInit {
   }
 
 }
-

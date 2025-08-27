@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Movie, ResolveSpeedRequest, ResolveSpeedResponse } from '../models/movie.interface';
 import { Genre } from '../models/genre.interface';
@@ -39,15 +39,5 @@ export class MovieService {
     });
     return this.http.get<ResolveSpeedResponse>(`${this.base}/movies/${req.movieId}/resolve-speed`, { params, withCredentials: true }
     );
-  }
-
-  addFavorite(id: number) {
-    return this.http.post(`${this.base}/movies/${id}/favorite/`, {}, { withCredentials: true });
-  }
-  removeFavorite(id: number) {
-    return this.http.delete(`${this.base}/movies/${id}/favorite/`, { withCredentials: true });
-  }
-  getFavorites() {
-    return this.http.get<Movie[]>(`${this.base}/movies/favorites/`, { withCredentials: true });
   }
 }

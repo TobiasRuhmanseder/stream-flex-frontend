@@ -1,1 +1,20 @@
-<p>my-list works!</p>
+<div class="favorite-wrapper">
+    <div class="header">
+        <h2>Deine Favoriten-Liste</h2>
+        @if (this.favoriteService.loading()) {
+        <app-spinner-little></app-spinner-little>
+        }
+    </div>
+    <div class="grid">
+        @for (movie of this.favoriteService.movies(); track movie.id) {
+        <app-card class="card" [movie]="movie" style="--card-basis: auto;"></app-card>
+        }
+        @empty {
+        @if(this.favoriteService.error()){
+        <p class="error">Es ist ein unerwarteter Fehler passiert!</p>
+        }@else {
+        <p>Deine Liste ist aktuell noch leer“</p>
+        }
+        }
+    </div>
+</div>

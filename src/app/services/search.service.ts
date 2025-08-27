@@ -1,4 +1,4 @@
-import { Injectable, signal, inject, DestroyRef } from '@angular/core';
+import { Injectable, signal, inject, DestroyRef, computed } from '@angular/core';
 import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
 import { Subject, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, switchMap, catchError, tap, finalize } from 'rxjs/operators';
@@ -6,6 +6,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Movie } from '../models/movie.interface';
 import { environment } from 'src/environments/environment';
 import { SKIP_LOADING_INTCR } from '../interceptor/http-context.tokens';
+import { FavoriteService } from './favorite.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,18 +22,20 @@ export class SearchService {
   private base = environment.apiBaseUrl;         // z.B. 'http://localhost:8000/api'
   private searchUrl = `${this.base}/movies/search/`;
 
-  private http = inject(HttpClient);
-  private destroyRef = inject(DestroyRef);
-
-  // Store
   readonly query = signal<string>('');
   readonly results = signal<Movie[]>([]);
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
 
+  readonly viewResults = computed(() => this.patchCurrentFavoritesIntoRow());
+
   private queries$ = new Subject<string>();
 
-  constructor() {
+  constructor(private http: HttpClient, private destroyRef: DestroyRef, private favoriteService: FavoriteService) {
+    this.init();
+  }
+
+  init() {
     this.queries$.pipe(
       map(q => (q ?? '').trim()),
       debounceTime(200),
@@ -54,11 +57,21 @@ export class SearchService {
     });
   }
 
+  patchCurrentFavoritesIntoRow() {
+    const favIds = this.favoriteService.favoriteIds();
+    const list = this.results();
+    if (!list.length) return list;
+    return list.map(m => ({
+      ...m,
+      is_favorite: favIds.has(m.id as number)
+    }));
+  }
+
   /** initiates the search */
   setQuery(q: string) {
     this.queries$.next(q);
     if ((q ?? '').trim().length === 0) {
-    // Clean up immediately when emptied
+      // Clean up immediately when emptied
       this.query.set('');
       this.results.set([]);
       this.loading.set(false);

@@ -6,15 +6,14 @@
 
 .grid {
     display: grid;
-    gap: .25rem;
-    /* minimaler fixer Abstand, Netflix-like */
+    gap: 5rem 0.25rem;
     grid-template-columns: repeat(var(--cards-per-row, 6), 1fr);
+
 }
 
 .card {
-    aspect-ratio: 16 / 9;
+    // aspect-ratio: 16 / 9;
     border-radius: .35rem;
-    overflow: hidden;
 }
 
 .card img {

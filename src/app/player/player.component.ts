@@ -35,7 +35,6 @@ export class PlayerComponent implements OnInit {
     this.movieService.resolveStream({ movieId: id, downlink, screenH }).subscribe({
       next: res => {
         this.src.set(res.url);
-        console.log(res);
 
         this.notifyService.showKey(res.message_key as any, 'info');
       },

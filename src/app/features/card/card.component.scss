@@ -1,7 +1,5 @@
 :host {
-    /* Größe kommt von außen */
     --card-basis: 25%;
-    /* Default für Slider */
     --card-aspect: 16/9;
     --card-radius: .35rem;
     --card-pad: .25rem;
@@ -27,6 +25,10 @@
     }
 
     &:hover .movie-title {
+        display: block;
+    }
+
+    &:hover .fav-button {
         display: block;
     }
 
@@ -72,4 +74,14 @@
 
 .info-button:hover {
     filter: invert(1);
+}
+
+.fav-button {
+    display: none;
+    cursor: pointer;
+    width: 2rem !important;
+    height: 2rem !important;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
 }

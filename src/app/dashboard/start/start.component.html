@@ -13,7 +13,7 @@
 }
 }
 <section class="rows" *ngIf="!loadingRows() && (rows()?.length ?? 0) > 0">
-    @for (row of rows(); track row.genre) {
+    @for (row of viewRows(); track row.genre) {
     <app-slide-row [row]="row"></app-slide-row>
     }
 </section>

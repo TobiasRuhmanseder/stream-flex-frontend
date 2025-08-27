@@ -6,8 +6,8 @@
         }
     </div>
     <div class="grid">
-        @for (m of searchService.results(); track m.id) {
-        <app-card class="card" [movie]="m" style="--card-basis: auto;"></app-card>
+        @for (movie of searchService.viewResults(); track movie.id) {
+        <app-card class="card" [movie]="movie" style="--card-basis: auto;"></app-card>
         }
         @empty {
         @if(searchService.error()){
