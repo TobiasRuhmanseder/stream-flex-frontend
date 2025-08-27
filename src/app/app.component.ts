@@ -14,21 +14,16 @@ import { trigger, transition, style, animate, group, query } from '@angular/anim
   animations: [
     trigger('routeTransition', [
       transition('* <=> *', [
-        // beide Views übereinander legen
         query(':enter, :leave', [
           style({ position: 'absolute', inset: 0, width: '100%' })
         ], { optional: true }),
-
         group([
-          // alte Seite leicht nach unten + ausfaden
           query(':leave', [
-            animate('1000ms ease', style({ opacity: 0 }))
+            animate('2000ms ease', style({ opacity: 0 }))
           ], { optional: true }),
-
-          // neue Seite leicht von oben + einfaden (mit kurzer Verzögerung)
           query(':enter', [
             style({ opacity: 0 }),
-            animate('1000ms ease', style({ opacity: 1 }))
+            animate('2000ms ease', style({ opacity: 1 }))
           ], { optional: true }),
         ]),
       ]),

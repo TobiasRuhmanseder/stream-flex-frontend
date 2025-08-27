@@ -1,7 +1,7 @@
 <div class="wrapper">
     <vg-player (onPlayerReady)="onPlayerReady($event)">
-        <video autoplay muted #media [vgMedia]="$any(media)" [vgMaster]="true" id="main-video" [src]="src"
-            preload="auto" playsinline crossorigin>
+        <video autoplay muted #media [vgMedia]="$any(media)" [attr.crossorigin]="'use-credentials'" [vgMaster]="true"
+            id="main-video" [src]="src()" preload="auto" playsinline crossorigin>
         </video>
 
         <vg-overlay-play></vg-overlay-play>
@@ -19,3 +19,6 @@
         </vg-controls>
     </vg-player>
 </div>
+<a [routerLink]="['/dashboard/start']">
+    <img src="assets/icons/slide_arrow_left.svg" alt="back button">
+</a>

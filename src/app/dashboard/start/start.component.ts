@@ -17,6 +17,10 @@ import { SlideRowComponent } from '../slide-row/slide-row.component';
   imports: [CommonModule, HeroViewComponent, SlideRowComponent],
   templateUrl: './start.component.html',
   styleUrl: './start.component.scss'
+  
+
+
+
 })
 export class StartComponent implements OnInit {
   loading = signal(true);

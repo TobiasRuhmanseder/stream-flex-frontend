@@ -1,0 +1,75 @@
+:host {
+    /* Größe kommt von außen */
+    --card-basis: 25%;
+    /* Default für Slider */
+    --card-aspect: 16/9;
+    --card-radius: .35rem;
+    --card-pad: .25rem;
+
+    display: block;
+    flex: 0 0 var(--card-basis);
+    max-width: var(--card-basis);
+}
+
+.card-image-wrapper {
+    position: relative;
+    padding: var(--card-pad);
+    aspect-ratio: var(--card-aspect);
+    border-radius: var(--card-radius);
+    filter: brightness(1);
+
+    &:hover {
+        filter: brightness(1.1);
+    }
+
+    &:hover .button-wrapper {
+        display: block;
+    }
+
+    &:hover .movie-title {
+        display: block;
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: var(--card-radius);
+    }
+}
+
+.button-wrapper {
+    display: none;
+    position: absolute;
+    bottom: .5rem;
+    right: .5rem;
+    z-index: 2;
+
+    img {
+        width: 2rem;
+        height: 2rem;
+        cursor: pointer;
+
+        &:hover {
+            opacity: .6;
+        }
+    }
+}
+
+.movie-title {
+    display: none;
+    position: absolute;
+    left: .5rem;
+    bottom: -2rem;
+    font-weight: 700;
+    font-size: 1rem;
+    z-index: 100;
+}
+
+.play-button {
+    filter: invert(1);
+}
+
+.info-button:hover {
+    filter: invert(1);
+}

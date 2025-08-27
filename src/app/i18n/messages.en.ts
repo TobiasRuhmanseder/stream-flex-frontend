@@ -12,4 +12,9 @@ export const MESSAGES_EN: Record<MsgKey, string> = {
     'network.offline': 'Network error. Please check your connection.',
     'http.badRequest': 'Please check your input.',
     'http.unexpected': 'Unexpected error. Please try again later.',
+    'player.quality.1080': 'Streaming in 1080p based on your connection and screen-height.',
+    'player.quality.720': 'Streaming in 720p based on your connection and screen-height.',
+    'player.quality.480': 'Streaming in 480p based on your connection and screen-height.',
+    'player.quality.fallback': 'Streaming quality selected by your screen.',
+    'player.error.source': 'Could not load the video stream. Please try again.',
 };

@@ -3,10 +3,12 @@ import { Component, input, signal, ElementRef, ViewChild, EventEmitter, Output, 
 import { MovieInfoOverlayComponent } from '../../movie-info-overlay/movie-info-overlay.component';
 import { Overlay } from '@angular/cdk/overlay';
 import { Movie } from 'src/app/models/movie.interface';
+import { RouterLink } from '@angular/router';
+
 
 @Component({
   selector: 'app-hero-view',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './hero-view.component.html',
   styleUrl: './hero-view.component.scss'
 })
@@ -70,7 +72,6 @@ export class HeroViewComponent implements AfterViewInit, OnDestroy {
       window.addEventListener('pointerdown', kick, true);
     }
   }
-
 
   openOverlayMovieInfo(hero: Movie | null) {
     this.dialog.open(MovieInfoOverlayComponent, {

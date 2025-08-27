@@ -10,4 +10,9 @@ export type MsgKey =
     | 'auth.resetSuccess'
     | 'network.offline'
     | 'http.badRequest'
-    | 'http.unexpected';
+    | 'http.unexpected'
+    | 'player.quality.1080'
+    | 'player.quality.720'
+    | 'player.quality.480'
+    | 'player.quality.fallback'
+    | 'player.error.source'

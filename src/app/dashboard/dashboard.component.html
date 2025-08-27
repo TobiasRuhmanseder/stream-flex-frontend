@@ -1,4 +1,6 @@
 <div class="dashboard">
     <app-header-menu></app-header-menu>
-    <router-outlet></router-outlet>
+    <div [@routeTransition]="getState(outlet)">
+        <router-outlet #outlet="outlet"></router-outlet>
+    </div>
 </div>

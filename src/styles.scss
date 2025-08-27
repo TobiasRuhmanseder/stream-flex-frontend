@@ -6,6 +6,11 @@ body {
     overflow-x: hidden;
 }
 
+body::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari */
+}
+
 html {
     font-size: 100%;
 }

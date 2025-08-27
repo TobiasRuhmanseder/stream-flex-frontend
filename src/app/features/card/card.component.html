@@ -1,0 +1,13 @@
+@if(movie()){
+<ng-container>
+    <div class="card-image-wrapper">
+        <img [src]="movie()?.thumbnail_image" [alt]="movie()?.title" />
+        <div class="button-wrapper">
+            <img class="play-button" src="assets/icons/play.svg" [routerLink]="['/player', movie()?.id]"
+                alt="play button" />
+            <img class="info-button" src="assets/icons/info.svg" (click)="open()" alt="info button" />
+        </div>
+        <p class="movie-title">{{ movie()?.title }}</p>
+    </div>
+</ng-container>
+}

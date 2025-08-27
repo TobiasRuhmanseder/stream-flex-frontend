@@ -7,7 +7,7 @@
         (ended)="ended.emit()" preload="auto"></video>
     <div class="overlay">
         <img class="img-logo" [src]="currentHero()?.logo" alt="movie logo">
-        <button class="bttn-white bttn-width mr-1rem" type="button" (click)="play.emit()">
+        <button class="bttn-white bttn-width mr-1rem" type="button" [routerLink]="['/player', currentHero()?.id]">
             <img src="assets/icons/play.svg" alt="">
             Abspielen
         </button>

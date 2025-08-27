@@ -12,6 +12,7 @@ import { ForgotPasswordComponent } from './home/forgot-password/forgot-password.
 import { ResetPasswordComponent } from './home/reset-password/reset-password.component';
 import { StartComponent } from './dashboard/start/start.component';
 import { PlayerComponent } from './player/player.component';
+import { SearchViewComponent } from './dashboard/search-view/search-view.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home/lets-go', pathMatch: 'full' },
@@ -36,9 +37,10 @@ export const routes: Routes = [
         data: { animation: 'dashboard' },
         children: [
             { path: '', redirectTo: 'start', pathMatch: 'full' }, // Default-Child-Redirect
-            { path: 'start', component: StartComponent },
+            { path: 'start', component: StartComponent, data: { animation: 'start' } },
+            { path: 'search-view', component: SearchViewComponent, data: { animation: 'search' } },
         ]
     },
-    { path: 'player', component: PlayerComponent, canActivate: [authGuard], data: { animation: 'player' } },
+    { path: 'player/:id', component: PlayerComponent, canActivate: [authGuard], data: { animation: 'player' }, },
     { path: '**', redirectTo: 'home/lets-go' }
 ]

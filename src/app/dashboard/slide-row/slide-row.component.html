@@ -12,14 +12,7 @@
     <button class="handle left-handle" [class.d-none]="index()===0" (click)="prev()"></button>
     <div class="slider" [style.--cards-per-screen]="cardsPerView()" [style.--slider-index]="index()">
         @for (movie of row()!.movies; track movie.id) {
-        <div class="image-wrapper">
-            <img [src]="movie.thumbnail_image" alt="" />
-            <div class="button-wrapper">
-                <img class="play-button" src="assets/icons/play.svg" (click)="playMovie(movie.id)" alt="play button">
-                <img class="info-button" src="assets/icons/info.svg" (click)="openOverlayMovieInfo(movie)" click
-                    alt="info button">
-            </div>
-        </div>
+        <app-card [movie]="movie" style="--card-basis: calc(100% / var(--cards-per-screen));"></app-card>
         }
     </div>
     <button class="handle right-handle" (click)="next()" [class.d-none]="(index()+1)===steps()"></button>

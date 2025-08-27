@@ -1,9 +1,8 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { CheckEmailResponse, SignUpRequest, CheckEmailRequest, SignUpResponse, User, SignInRequest, SignInResponse, PasswordResetConfirmRequest, PasswordResetRequest } from '../models/user.interfaces';
 import { catchError, lastValueFrom, map, mapTo, Observable, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { HttpContext } from '@angular/common/http';
 import { SKIP_AUTH_REFRESH, SILENT_AUTH_CHECK, SKIP_LOADING_INTCR } from '../interceptor/http-context.tokens';
 
@@ -16,7 +15,8 @@ export class AuthService {
 
   // SILENT_AUTH_CHECK: no toast/console on unauthenticated /me
   // SKIP_AUTH_REFRESH: do not attempt interceptor refresh for this request
-  //look at the http-error.tokens.ts file for more informations
+  // SKIP_LOADING_INTCR: do not attempt interceptor loading for this request
+  //look at the interceptor/http-error.tokens.ts file for more informations
 
   private _user = signal<User | null>(null);
   readonly user = this._user.asReadonly();
@@ -129,7 +129,7 @@ export class AuthService {
       },
       complete: () => {
         this._user.set(null);
-        // window.location.reload();
+        window.location.reload();
       },
     });
   }

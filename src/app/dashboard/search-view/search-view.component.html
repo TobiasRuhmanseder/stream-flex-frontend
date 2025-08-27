@@ -1,0 +1,20 @@
+<div class="search-wrapper">
+    <div class="header">
+        <h2>Suchergebnisse</h2>
+        @if (searchService.loading()) {
+        <app-spinner-little></app-spinner-little>
+        }
+    </div>
+    <div class="grid">
+        @for (m of searchService.results(); track m.id) {
+        <app-card class="card" [movie]="m" style="--card-basis: auto;"></app-card>
+        }
+        @empty {
+        @if(searchService.error()){
+        <p class="error">{{ searchService.error() }}</p>
+        }@else {
+        <p>Keine Treffer für „{{ searchService.query() }}“</p>
+        }
+        }
+    </div>
+</div>

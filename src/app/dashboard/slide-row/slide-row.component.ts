@@ -5,6 +5,8 @@ import { SliderService } from 'src/app/services/slider.service';
 import { MovieInfoOverlayComponent } from '../movie-info-overlay/movie-info-overlay.component';
 import { Dialog } from '@angular/cdk/dialog';
 import { Overlay } from '@angular/cdk/overlay';
+import { RouterLink } from '@angular/router';
+import { CardComponent } from 'src/app/features/card/card.component';
 
 
 
@@ -12,7 +14,7 @@ type Mode = 'desktop' | 'snap';
 
 @Component({
   selector: 'app-slide-row',
-  imports: [CommonModule],
+  imports: [CommonModule, CardComponent],
   templateUrl: './slide-row.component.html',
   styleUrl: './slide-row.component.scss'
 })
@@ -38,11 +40,6 @@ export class SlideRowComponent {
     let steps = Math.ceil(this.row()!.movies.length / this.cardsPerView());
 
     return steps
-  }
-
-  playMovie(id: number) {
-    console.log('play');
-
   }
 
   openOverlayMovieInfo(movie: Movie) {
