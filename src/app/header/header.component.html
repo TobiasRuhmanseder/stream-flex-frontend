@@ -1,0 +1,9 @@
+<div class="header-menu">
+    <img [routerLink]="['/home/lets-go']" src="../../assets/img/streamflex_logo.png" alt="">
+    <div class="login-language-section">
+        <app-language-dropdown class="header-language-dropdown"></app-language-dropdown>
+        @if(!isHiddenRoute()){
+        <button class="bttn-red bttn-header" routerLink="sign-in">Einloggen</button>
+        }
+    </div>
+</div>

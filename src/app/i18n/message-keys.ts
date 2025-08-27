@@ -1,4 +1,4 @@
-// All translatable message keys used across the app
+// All translatable message keys used for the notification-toast
 export type MsgKey =
     | 'auth.sessionExpired'
     | 'auth.refreshFailed'
@@ -16,3 +16,4 @@ export type MsgKey =
     | 'player.quality.480'
     | 'player.quality.fallback'
     | 'player.error.source'
+    | 'signup.success'

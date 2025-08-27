@@ -3,11 +3,12 @@ import { AuthService } from '../services/auth.service';
 import { HeaderMenuComponent } from './header-menu/header-menu.component';
 import { RouterModule, RouterOutlet } from "@angular/router";
 import { animate, group, query, style, transition, trigger } from '@angular/animations';
+import { FooterComponent } from "../footer/footer.component";
 
 
 @Component({
   selector: 'app-dashboard',
-  imports: [HeaderMenuComponent, RouterModule],
+  imports: [HeaderMenuComponent, RouterModule, FooterComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
   animations: [

@@ -1,6 +1,6 @@
 @if(!loading() && currentHero()){
 <div class="hero-fader" [class.is-fading]="isFading()">
-    <app-hero-view [currentHero]="currentHero()" (play)="onPlayRequested()" (ended)="onEnded()"
+    <app-hero-view [currentHero]="currentHero()" (ended)="onEnded()"
         (canPlayReady)="onCanPlayReady()"></app-hero-view>
 </div>
 @if (heroes().length > 1) {

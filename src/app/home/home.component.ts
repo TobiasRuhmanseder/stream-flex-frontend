@@ -1,16 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LanguageDropdownComponent } from '../features/language-dropdown/language-dropdown.component';
-import { RouterOutlet, RouterLink, RouterModule, ActivatedRoute } from '@angular/router';
+import { RouterOutlet, RouterModule, ActivatedRoute } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { environment } from 'src/environments/environment';
 import { RecaptchaService } from '../services/recaptcha.service';
+import { FooterComponent } from "../footer/footer.component";
+import { HeaderComponent } from "../header/header.component";
 
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, LanguageDropdownComponent, RouterOutlet, RouterLink, RouterModule],
+  imports: [CommonModule, RouterOutlet, RouterModule, FooterComponent, HeaderComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   animations: [

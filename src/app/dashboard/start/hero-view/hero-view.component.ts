@@ -4,6 +4,7 @@ import { MovieInfoOverlayComponent } from '../../movie-info-overlay/movie-info-o
 import { Overlay } from '@angular/cdk/overlay';
 import { Movie } from 'src/app/models/movie.interface';
 import { RouterLink } from '@angular/router';
+import { MovieOverlayInfoService } from 'src/app/services/movie-overlay-info.service';
 
 
 @Component({
@@ -22,6 +23,7 @@ export class HeroViewComponent implements AfterViewInit, OnDestroy {
 
   private gestureBound = false;
   private visHandler = () => this.tryPlay();
+  readonly error = signal<boolean>(false);
 
   @Output() play = new EventEmitter<void>();
   @Output() ended = new EventEmitter<void>();
@@ -29,7 +31,7 @@ export class HeroViewComponent implements AfterViewInit, OnDestroy {
   @ViewChild('teaser') teaser?: ElementRef<HTMLVideoElement>;
 
 
-  constructor(private dialog: Dialog, private overlay: Overlay) {
+  constructor(private dialog: Dialog, private overlay: Overlay, private movieOverlayInfoService: MovieOverlayInfoService) {
     effect(() => this.applySourceIfReady());
   }
 
@@ -73,15 +75,10 @@ export class HeroViewComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  openOverlayMovieInfo(hero: Movie | null) {
-    this.dialog.open(MovieInfoOverlayComponent, {
-      data: hero,
-      autoFocus: '#bttn',
-      restoreFocus: true,
-      disableClose: true,
-      scrollStrategy: this.overlay.scrollStrategies.noop(),
-    });
-
+  openOverlayMovieInfo() {
+    let movie = this.currentHero()
+    if (!movie) return
+    this.movieOverlayInfoService.open(movie);
   }
 }
 

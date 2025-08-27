@@ -14,6 +14,8 @@ import { StartComponent } from './dashboard/start/start.component';
 import { PlayerComponent } from './player/player.component';
 import { SearchViewComponent } from './dashboard/search-view/search-view.component';
 import { MyListComponent } from './dashboard/my-list/my-list.component';
+import { ImpressumComponent } from './impressum/impressum.component';
+import { PrivacyComponent } from './privacy/privacy.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home/lets-go', pathMatch: 'full' },
@@ -44,5 +46,7 @@ export const routes: Routes = [
         ]
     },
     { path: 'player/:id', component: PlayerComponent, canActivate: [authGuard], data: { animation: 'player' }, },
+    { path: 'impressum', component: ImpressumComponent, data: { animation: 'impressum' }, },
+    { path: 'privacy', component: PrivacyComponent, data: { animation: 'privacy' }, },
     { path: '**', redirectTo: 'home/lets-go' }
 ]

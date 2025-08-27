@@ -9,7 +9,7 @@ import { LocaleService } from '../i18n/locale.service';
 export class NotificationSignalsService {
   globalNotification = signal<GlobalNotification | null>(null);
 
-  constructor(private locale: LocaleService) { }
+  constructor(private localeService: LocaleService) { }
 
 
   show(globalNotification: GlobalNotification) {
@@ -21,7 +21,7 @@ export class NotificationSignalsService {
   }
 
   showKey(key: MsgKey, type: GlobalNotification['type'] = 'error', params?: Record<string, string | number>) {
-    const message = this.locale.t(key, params);
+    const message = this.localeService.translate(key, params);
     this.show({ message, type });
   }
 

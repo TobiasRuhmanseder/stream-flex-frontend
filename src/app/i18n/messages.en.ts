@@ -17,4 +17,5 @@ export const MESSAGES_EN: Record<MsgKey, string> = {
     'player.quality.480': 'Streaming in 480p based on your connection and screen-height.',
     'player.quality.fallback': 'Streaming quality selected by your screen.',
     'player.error.source': 'Could not load the video stream. Please try again.',
+    'signup.success': 'The registration was successful',
 };

@@ -1,0 +1,37 @@
+.footer {
+    font-size: 1.1rem;
+}
+
+.footer-container {
+    padding: 0 6rem;
+    height: 8rem;
+    background-color: rgb(168, 21, 21);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(180deg,
+            rgba(14, 14, 14, 0.1) 0%,
+            rgba(14, 14, 14, 0.8) 30%,
+            rgb(14, 14, 14, 1) 100%);
+}
+
+.left-side {
+    display: flex;
+
+    a {
+        text-decoration: none;
+        color: rgb(197, 197, 197);
+        margin-right: 2rem;
+
+        &:hover {
+            color: white;
+        }
+    }
+}
+
+.right-side {
+
+    img {
+        height: 2.5rem;
+    }
+}

@@ -7,7 +7,7 @@ type Lang = 'en' | 'de';
 
 @Injectable({ providedIn: 'root' })
 export class LocaleService {
-  private _lang = signal<Lang>('en');           // runtime switch möglich
+  private _lang = signal<Lang>(localStorage.getItem('lang') as Lang || 'en');
   readonly lang = this._lang.asReadonly();
 
   // hier später: MESSAGES_DE hinzufügen
@@ -16,9 +16,12 @@ export class LocaleService {
     de: MESSAGES_DE,
   };
 
-  setLang(l: Lang) { this._lang.set(l); }
+  setLang(l: Lang) {
+    this._lang.set(l);
+    localStorage.setItem('lang', l);
+  }
 
-  t(key: MsgKey, params?: Record<string, string | number>): string {
+  translate(key: MsgKey, params?: Record<string, string | number>): string {
     const raw = this.dicts[this._lang()][key] ?? key;
     if (!params) return raw;
     return Object.keys(params).reduce(

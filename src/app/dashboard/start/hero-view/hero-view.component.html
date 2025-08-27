@@ -1,20 +1,23 @@
 <div class="hero-view">
-    @if(currentHero()?.hero_image && currentHero()?.teaser_video){
-    @if(!currentHero()?.teaser_video){
+    @if(!currentHero()?.teaser_video && error()){
     <img [src]="currentHero()?.hero_image" alt="hero image">
     }
-    <video #teaser [src]="currentHero()?.teaser_video" autoplay muted playsinline (canplay)="onCanPlay()"
-        (ended)="ended.emit()" preload="auto"></video>
-    <div class="overlay">
+    <div class="hero-video-wrapper">
+        <video #teaser [src]="currentHero()?.teaser_video" autoplay muted (canplay)="onCanPlay()" (ended)="ended.emit()"
+            onerror="error().set(true)"></video>
+        <ng-template #placeholder>
+            <div class="video-placeholder"></div>
+        </ng-template>
+    </div>
+    <div class=" overlay">
         <img class="img-logo" [src]="currentHero()?.logo" alt="movie logo">
         <button class="bttn-white bttn-width mr-1rem" type="button" [routerLink]="['/player', currentHero()?.id]">
             <img src="assets/icons/play.svg" alt="">
             Abspielen
         </button>
-        <button class="bttn-grey bttn-width" type="button" (click)="openOverlayMovieInfo(currentHero())">
+        <button class="bttn-grey bttn-width" type="button" (click)="openOverlayMovieInfo()">
             <img src="assets/icons/info.svg" alt="">
             Weitere Infos
         </button>
     </div>
-    }
 </div>

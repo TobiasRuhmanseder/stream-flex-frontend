@@ -30,7 +30,10 @@ export class StartComponent implements OnInit {
   loadingRows = signal(true);
   rows = signal<Row[]>([]);
   viewRows = computed(() => this.patchCurrentFavoritesIntoRow());
-
+  currentHero = computed(() => {
+    const arr = this.heroes();
+    return arr.length ? arr[this.idx() % arr.length] : null;
+  });
 
   constructor(private movieService: MovieService, private notifyService: NotificationSignalsService, private authService: AuthService, private router: Router, private favoritesService: FavoriteService) { }
 
@@ -54,11 +57,6 @@ export class StartComponent implements OnInit {
     }));
 
   }
-
-  currentHero = computed(() => {
-    const arr = this.heroes();
-    return arr.length ? arr[this.idx() % arr.length] : null;
-  });
 
   getHeroes() {
     this.movieService.getHeroes(3).subscribe({
@@ -118,11 +116,4 @@ export class StartComponent implements OnInit {
   onCanPlayReady() {
     requestAnimationFrame(() => this.isFading.set(false));
   }
-
-  onPlayRequested() {
-    const h = this.currentHero();
-    if (!h) return;
-    this.router.navigate(['/player', h.id]); // späterer vollwertiger Player
-  }
-
 }

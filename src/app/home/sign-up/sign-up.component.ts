@@ -48,7 +48,7 @@ export class SignUpComponent implements OnInit {
       if (!parent) return null;
       const pwd = parent.get('password')?.value;
       const confirm = control.value;
-      if (!confirm || !pwd) return null; 
+      if (!confirm || !pwd) return null;
       return confirm === pwd ? null : { passwordMismatch: true };
     };
   }
@@ -71,12 +71,12 @@ export class SignUpComponent implements OnInit {
     if (this.signupForm.invalid) return
     const email = this.emailControl.value
     const password = this.passwordControl.value
-    
+
     this.recaptchaService.getToken('signup')
       .pipe(
         switchMap(token => this.authService.signUp({ email, password, recaptchaToken: token })),
         tap((resp: SignUpResponse) => {
-          this.notificationService.show({ type: 'success', message: `${resp.email} was created successfully ` });
+          this.notificationService.showKey('signup.success', 'success');
         }),
         delay(2000)
       ).subscribe((resp: SignUpResponse) => {

@@ -23,10 +23,10 @@ import { CommonModule } from '@angular/common';
 })
 export class SignalNotificationComponent {
 
-  notificationService = inject(NotificationSignalsService);
+
   globalNotification = this.notificationService.globalNotification;
 
-  constructor() {
+  constructor(private notificationService: NotificationSignalsService) {
     effect(() => {
       if (this.globalNotification()) {
         setTimeout(() => this.notificationService.clear(), 4000)
