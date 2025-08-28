@@ -9,12 +9,24 @@ function normalize(s: string): string {
 }
 
 @Pipe({
-  name: 'translate'
+  name: 'translate',
+  pure: false
 })
+/**
+ * A pipe that translates English literals to the current locale's language.
+ */
 export class TranslatePipe implements PipeTransform {
+
+
   constructor(private localeService: LocaleService) { }
+  
+  /**
+   * Transforms an English literal to the corresponding translation based on the current language.
+   * @param literalEn The English literal string to translate.
+   * @returns The translated string if available; otherwise, the original English literal.
+   */
   transform(literalEn: string): string {
-    // Signal lesen -> macht die Pipe reaktiv bei Sprachwechsel
+
     const lang = this.localeService.lang();
 
     if (lang === 'de') {
@@ -22,9 +34,6 @@ export class TranslatePipe implements PipeTransform {
       const match = LITERALS_DE[literalEn] ?? LITERALS_DE[key];
       if (match) return match;
     }
-
-    // Fallback: originaler EN-Text
     return literalEn;
   }
 }
-

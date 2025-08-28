@@ -1,33 +1,33 @@
 <div class="sign-dialog sign-in">
     <div>
-        <h2>Einloggen</h2>
+        <h2>{{'Sign in'| translate}}</h2>
         <form [formGroup]="loginForm" (ngSubmit)="signIn()">
 
-            <app-sign-input [control]="emailControl" label="E-Mail-Adresse" type="email"
-                [errorMessages]="{
-                    required: 'Dieses Feld ist erforderlich.',
-                    invalidIdentifier: 'Bitte geben Sie eine gültige E-Mail-Adresse ein.'
-                }">
+            <app-sign-input [control]="emailControl" label="E-Mail" type="email" [errorMessages]="{
+                    required:('This field is required.'| translate),
+                    invalidIdentifier: ('Please enter a valid email address.'| translate)}">
             </app-sign-input>
 
-            <app-sign-input [control]="passwordControl" label="Passwort" type="password" [errorMessages]="{
-                    required: 'Dieses Feld ist erforderlich.',
-                    minlength: 'Das Passwort muss mindestens 8 Zeichen lang sein.',
-                    maxlength: 'Das Passwort darf maximal 60 Zeichen lang sein.',
-                    pattern: 'Das Passwort muss mindestens einen Großbuchstaben, einen Kleinbuchstaben, eine Zahl und ein Sonderzeichen enthalten.'
+            <app-sign-input [control]="passwordControl" label="{{'Password' | translate}}" type="password"
+                [errorMessages]="{
+                    required: ('This field is required.'| translate),
+                    minlength: ('The password must be at least 8 characters long.'| translate),
+                maxlength: ('The password may be a maximum of 60 characters long.'| translate),
+                pattern: ('The password must contain at least one uppercase letter, one lowercase letter, one number and one special character.'| translate),
                 }">
             </app-sign-input>
             <label class="checkbox-container">
                 <input type="checkbox" formControlName="rememberMe" />
                 <span class="checkmark"></span>
-                Benutzerdaten merken
+                {{'Remember me' | translate}}
             </label>
-            <button class="bttn-red bttn-full-width" type="submit" [disabled]="loginForm.invalid">Einloggen</button>
+            <button class="bttn-red bttn-full-width" type="submit" [disabled]="loginForm.invalid">{{'Sign in'|
+                translate}}</button>
         </form>
-        <a class="route-text" [routerLink]="['/home/password-forgot']"> Passwort vergessen? </a>
-        <a class="route-text" [routerLink]="['/home/sign-up']">Noch nicht registiert?</a>
+        <a class="route-text" [routerLink]="['/home/password-forgot']"> {{'Forgot your password?' | translate}} </a>
+        <a class="route-text" [routerLink]="['/home/sign-up']">{{'New to Streamflex?' | translate}}</a>
     </div>
-    <p class="recapcha-text">Diese Seite ist durch Google reCAPTCHA abgesichert, um sicherzustellen, dass Sie kein Bot sind.<br>
-    Für weitere Infos, siehe rechts unten!
-</p>
+    <p class="recapcha-text">{{"This site is secured by Google reCAPTCHA to ensure you are not a bot." | translate}}<br>
+        {{"For more information, see bottom right!" | translate}}
+    </p>
 </div>

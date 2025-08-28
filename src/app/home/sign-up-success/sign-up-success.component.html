@@ -1,10 +1,11 @@
 <h3 class="info-text">
-    <h1> Registrierung erfolgreich!</h1> <br>
-    Bitte überprüfe dein E-Mail Postfach. Wir haben dir einen Bestätigungslink an {{this.email}} gesendet.
+    <h1>{{'Sign up successful!'|translate}}</h1> <br>
+    {{'Please check your email inbox. We have sent you a confirmation link to '|translate}} {{this.email}}
+    {{"."|translate}}.
     <br>
     Danach kannst du dich ganz normal in deinen neuen Account einloggen!
     <br> <br>
     <a class="link" [routerLink]="['/home/sign-in']" [queryParams]="{ email: email }">
-        Zur Loginseite einfach hier klicken!
+        {{'To access the login page, simply click here!'|translate}}
     </a>
 </h3>

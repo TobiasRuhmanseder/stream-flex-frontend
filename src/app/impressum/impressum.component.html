@@ -1,3 +1,4 @@
+@if(localeService.lang() === 'de'){
 <div class="impressum">
     <header>
         <app-header></app-header>
@@ -8,7 +9,7 @@
         <h2>Angaben gem&auml;&szlig; &sect; 5 TMG</h2>
         <p>Tobias Ruhmanseder<br />
             Lerchenring 29<br />
-            94377 Steinach</p>
+            D-94377 Steinach</p>
 
         <h2>Kontakt</h2>
         <p>Telefon: +49 (0) 162 6375580<br />
@@ -20,3 +21,27 @@
         <app-footer></app-footer>
     </footer>
 </div>
+}@else{
+<div class="impressum">
+    <header>
+        <app-header></app-header>
+    </header>
+    <main>
+        <h1>Imprint</h1>
+
+        <h2>Information according to § 5 TMG</h2>
+        <p>Tobias Ruhmanseder<br />
+            Lerchenring 29<br />
+            D-94315 Steinach</p>
+
+        <h2>Contact</h2>
+        <p>Phone: +49 (0) 162 637<br />
+            E-Mail: mail&#64;tobias-ruhmanseder.de</p>
+
+        <p>Source: <a href="https://www.e-recht24.de">https://www.e-recht24.de</a></p>
+    </main>
+    <footer>
+        <app-footer></app-footer>
+    </footer>
+</div>
+}

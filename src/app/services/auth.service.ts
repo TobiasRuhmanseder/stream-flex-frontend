@@ -7,23 +7,30 @@ import { HttpContext } from '@angular/common/http';
 import { SKIP_AUTH_REFRESH, SILENT_AUTH_CHECK, SKIP_LOADING_INTCR } from '../interceptor/http-context.tokens';
 
 const STORAGE_KEY = 'sf_maybeLoggedIn';
+
+
+// =================http-context's Info========================
+// SILENT_AUTH_CHECK: no toast/console on unauthenticated /me
+// SKIP_AUTH_REFRESH: do not attempt interceptor refresh for this request
+// SKIP_LOADING_INTCR: do not attempt interceptor loading for this request
+//look at the interceptor/http-error.tokens.ts file for more informations
+
 @Injectable({
   providedIn: 'root'
 })
+
+
+/**
+ * AuthService handles authentication, session management, and user state.
+ * It manages login, logout, sign-up, user info, and keeps session hints in sync.
+ */
 export class AuthService {
-  // =================http-context's Info========================
-
-  // SILENT_AUTH_CHECK: no toast/console on unauthenticated /me
-  // SKIP_AUTH_REFRESH: do not attempt interceptor refresh for this request
-  // SKIP_LOADING_INTCR: do not attempt interceptor loading for this request
-  //look at the interceptor/http-error.tokens.ts file for more informations
-
   private _user = signal<User | null>(null);
   readonly user = this._user.asReadonly();
 
   maybeLoggedIn = signal<boolean>(localStorage.getItem(STORAGE_KEY) === '1');
 
-  private base = environment.apiBaseUrl;         // z.B. 'http://localhost:8000/api'
+  private base = environment.apiBaseUrl;
   private signUpUrl = `${this.base}/users/signup/`;
   private emailExistUrl = `${this.base}/users/check-email/`;
   private geMeUrl = `${this.base}/users/me/`;
@@ -41,7 +48,10 @@ export class AuthService {
   }
 
 
-  /** Syncs the maybeLoggedIn hint with localStorage and across tabs. */
+  /**
+   * Syncs the maybeLoggedIn hint with localStorage and across tabs.
+   * Keeps login state consistent between browser tabs.
+   */
   storageSync(): void {
     // initialize from localStorage
     try {
@@ -59,20 +69,31 @@ export class AuthService {
     });
   }
 
-  /** Mark hint after successful sign-in. */
+  /**
+   * Marks the user as logged in after successful sign-in.
+   * Updates localStorage and maybeLoggedIn signal.
+   */
   markLoggedInHint(): void {
     this.maybeLoggedIn.set(true);
     try { localStorage.setItem(STORAGE_KEY, '1'); } catch { }
   }
 
-  /** Clear hint on sign-out or when session is gone. */
+  /**
+   * Clears the logged-in hint on sign-out or session end.
+   * Updates localStorage and maybeLoggedIn signal.
+   */
   clearLoggedInHint(): void {
     this.maybeLoggedIn.set(false);
     try { localStorage.removeItem(STORAGE_KEY); } catch { }
   }
 
 
-  // look at the app.config.ts - initializeApp()
+  /**
+   * Initializes authentication state on app start.
+   * Gets CSRF token and user info if maybe logged in.
+   * look at the app.config.ts - initializeApp()
+   */
+  // 
   init(): Promise<void> {
     const silentCtx = new HttpContext().set(SILENT_AUTH_CHECK, true);
     const csrf$ = this.http.get(this.getCsrfUrl, { withCredentials: true });
@@ -87,6 +108,10 @@ export class AuthService {
     return lastValueFrom(init$);
   }
 
+  /**
+   * Ensures user info is loaded.
+   * Gets user from signal or fetches from backend.
+   */
   ensureUser(): Observable<User | null> {
     const user = this._user();
     if (user) return of(user)
@@ -95,30 +120,41 @@ export class AuthService {
       tap(user => this._user.set(user)), catchError(() => of(null)))
   }
 
+  /**
+   * Registers a new user with provided sign-up data.
+   */
   signUp(data: SignUpRequest): Observable<SignUpResponse> {
     return this.http.post<SignUpResponse>(this.signUpUrl, data)
   }
 
+  /**
+   * Signs in the user with credentials.
+   * Sets user state and marks as logged in.
+   */
   signIn(data: SignInRequest): Observable<SignInResponse> {
-    const context = new HttpContext().set(SKIP_AUTH_REFRESH, true);
+    const ctx = new HttpContext().set(SKIP_AUTH_REFRESH, true);
 
-    return this.http.post<SignInResponse>(this.signInUrl, data, { withCredentials: true, context }).pipe(
+    return this.http.post<SignInResponse>(this.signInUrl, data, { withCredentials: true, context: new HttpContext().set(SKIP_LOADING_INTCR, true) }).pipe(
       tap(res => { this._user.set(res.user); this.markLoggedInHint(); })
     );
   }
 
+  /**
+   * Ensures session is fresh without triggering loading interceptor.
+   * Used to silently check access.
+   */
   ensureFreshAccessWithoutLoadingIntcr(): Observable<void> {
-    const context = new HttpContext().set(SKIP_LOADING_INTCR, true);
+    const ctx = new HttpContext().set(SKIP_LOADING_INTCR, true);
 
-    return this.http.get(this.geMeUrl, { withCredentials: true, context })
+    return this.http.get(this.geMeUrl, { withCredentials: true, context: ctx })
       .pipe(
         map(() => undefined),
         catchError(() => of(undefined))
       );
   }
   /**
-   * Logs out on the server (deletes cookies) and clears the local user signal.
-   * This method self-subscribes because it is often called from interceptors.
+   * Logs out the user on the server and clears local user state.
+   * Reloads the page. Used by interceptors.
    */
   signOut(): void {
     this.clearLoggedInHint();
@@ -134,20 +170,32 @@ export class AuthService {
     });
   }
 
-  /** Clears user state locally without calling the backend (used when refresh fails). */
+  /**
+   * Clears user state locally without calling the backend.
+   * Used when refresh fails or session is lost.
+   */
   forceLogoutLocal(): void {
     this._user.set(null);
     this.clearLoggedInHint();
   }
 
+  /**
+   * Checks if an email already exists.
+   */
   checkEmailExist(data: CheckEmailRequest): Observable<CheckEmailResponse> {
     return this.http.post<CheckEmailResponse>(this.emailExistUrl, data);
   }
 
+  /**
+   * Requests a password reset for a given email.
+   */
   passwordResetRequest(data: PasswordResetRequest) {
     return this.http.post<void>(this.passwordResetUrl, data, { withCredentials: true });
   }
 
+  /**
+   * Confirms password reset with new password and token.
+   */
   passwordResetConfirm(data: PasswordResetConfirmRequest) {
     return this.http.post<void>(this.passwordResetConfirmUrl, data, { withCredentials: true });
   }
@@ -157,19 +205,25 @@ export class AuthService {
    * Returns true on success, false on failure.
    */
   refreshJwtToken(): Observable<boolean> {
-    const context = new HttpContext().set(SKIP_AUTH_REFRESH, true);
+    const ctx = new HttpContext().set(SKIP_AUTH_REFRESH, true);
 
-    return this.http.post(this.tokenRefreshUrl, {}, { withCredentials: true, context }).pipe(
+    return this.http.post(this.tokenRefreshUrl, {}, { withCredentials: true, context: ctx }).pipe(
       map(() => true),
       catchError(() => of(false))
     );
   }
 
+  /**
+   * Verifies user email with the provided token.
+   */
   verifyEmail(token: string) {
     const params = new HttpParams().set('token', token);
     return this.http.get<void>(this.verifyEmailUrl, { params, withCredentials: true });
   }
 
+  /**
+   * Resends the verification email to the given address.
+   */
   resendVerificaton(email: string) {
     return this.http.post(this.resendVerifyEmailUrl, { email }, { withCredentials: true });
   }

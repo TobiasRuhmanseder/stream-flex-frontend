@@ -2,12 +2,12 @@ import { AfterViewInit, ChangeDetectorRef, Component, Inject } from '@angular/co
 import { animate, style, transition, trigger, AnimationEvent } from '@angular/animations';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Movie } from 'src/app/models/movie.interface';
-// import { CdkFocusInitial } from '@angular/cdk/a11y';
+import { TranslatePipe } from 'src/app/i18n/translate.pipe';
 
 @Component({
   selector: 'app-movie-info-overlay',
   standalone: true,
-  imports: [],
+  imports: [TranslatePipe],
   templateUrl: './movie-info-overlay.component.html',
   styleUrl: './movie-info-overlay.component.scss',
   animations: [
@@ -22,6 +22,11 @@ import { Movie } from 'src/app/models/movie.interface';
     ])
   ],
 })
+/**
+ * MovieInfoOverlayComponent displays detailed information about a selected movie
+ * in an overlay dialog. It handles showing and hiding with animations, and
+ * provides controls to close the overlay or play the movie.
+ */
 export class MovieInfoOverlayComponent implements AfterViewInit {
   /** steuert das @fadeInOut via *ngIf */
   show = false;
@@ -32,21 +37,37 @@ export class MovieInfoOverlayComponent implements AfterViewInit {
     private cdr: ChangeDetectorRef,
   ) { }
 
+  /**
+   * Called after the component's view has been initialized.
+   * Triggers the animation to show the overlay.
+   */
   ngAfterViewInit() {
     this.show = true;
     this.cdr.detectChanges();
   }
 
+  /**
+   * Closes the overlay by triggering the fade-out animation.
+   */
   close() {
     this.show = false;
   }
 
+  /**
+   * Handles the animation completion event.
+   * If the overlay has finished fading out, closes the dialog.
+   * @param ev Animation event data
+   */
   onAnimDone(ev: AnimationEvent) {
     if ((ev as any).toState === 'void') {
       this.ref.close();
     }
   }
 
+  /**
+   * Called when the user wants to play the movie.
+   * (Currently not implemented.)
+   */
   playMovie() {
 
   }

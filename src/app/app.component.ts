@@ -31,10 +31,18 @@ import { trigger, transition, style, animate, group, query } from '@angular/anim
   ],
 })
 
+/**
+ * Root component of the application providing global services and handling route transition animations.
+ */
 export class AppComponent {
   title = 'stream-flex-frontend';
   public loadingOverlayService = inject(LoadingOverlayService);
 
+  /**
+   * Retrieves the current route's animation state to be used for route transition animations.
+   * @param outlet The router outlet containing the activated route.
+   * @returns The animation state string of the current route or 'default' if none is set.
+   */
   getState(outlet: RouterOutlet) {
     return outlet?.activatedRouteData?.['animation'] ?? 'default';
   }

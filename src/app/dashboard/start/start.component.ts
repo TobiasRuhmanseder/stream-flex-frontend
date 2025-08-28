@@ -19,9 +19,12 @@ import { FavoriteService } from 'src/app/services/favorite.service';
   imports: [CommonModule, HeroViewComponent, SlideRowComponent],
   templateUrl: './start.component.html',
   styleUrl: './start.component.scss'
-
-
 })
+
+/**
+ * Component to display the start page with heroes and movie rows.
+ * Manages fetching and displaying featured heroes and movies by genre.
+ */
 export class StartComponent implements OnInit {
   loading = signal(true);
   heroes = signal<Movie[]>([]);
@@ -37,13 +40,18 @@ export class StartComponent implements OnInit {
 
   constructor(private movieService: MovieService, private notifyService: NotificationSignalsService, private authService: AuthService, private router: Router, private favoritesService: FavoriteService) { }
 
-
+  /**
+   * Starts fetching heroes and movie genres with movies.
+   */
   ngOnInit(): void {
     this.getHeroes();
     this.getGenreAndMovies();
   }
 
-
+  /**
+   * Updates the movie rows by marking movies as favorite if they are in the favorite list.
+   * @returns Updated rows with favorite status patched in the movies.
+   */
   patchCurrentFavoritesIntoRow(): Row[] {
     const favIds = this.favoritesService.favoriteIds();
     const currentRows = this.rows();
@@ -58,6 +66,11 @@ export class StartComponent implements OnInit {
 
   }
 
+  /**
+   * Fetches the featured heroes from the movie service.
+   * Updates the heroes signal and loading state.
+   * Shows notification on error.
+   */
   getHeroes() {
     this.movieService.getHeroes(3).subscribe({
       next: (arr) => {
@@ -73,6 +86,11 @@ export class StartComponent implements OnInit {
     });
   }
 
+  /**
+   * Fetches genres and movies by genre.
+   * Filters out empty movie lists and updates the rows signal.
+   * Handles loading state and errors.
+   */
   getGenreAndMovies() {
     this.movieService.getGenres().pipe(
       mergeMap((genres: Genre[]) => {
@@ -96,6 +114,10 @@ export class StartComponent implements OnInit {
     });
   }
 
+  /**
+   * Sets the current hero by index and ensures fresh authentication access.
+   * @param i Index of the hero to apply.
+   */
   applyHero(i: number) {
     const arr = this.heroes();
     if (!arr.length) return;
@@ -105,6 +127,10 @@ export class StartComponent implements OnInit {
     this.authService.ensureFreshAccessWithoutLoadingIntcr().subscribe(() => { });
   }
 
+  /**
+   * Handles the end of hero animation or video.
+   * Starts fading effect and sets the next hero after a delay.
+   */
   onEnded() {
     this.isFading.set(true);
     const next = (this.idx() + 1) % this.heroes().length;
@@ -113,6 +139,10 @@ export class StartComponent implements OnInit {
     }, 1000);
   }
 
+  /**
+   * Called when the hero video or animation is ready to play.
+   * Removes the fading effect.
+   */
   onCanPlayReady() {
     requestAnimationFrame(() => this.isFading.set(false));
   }

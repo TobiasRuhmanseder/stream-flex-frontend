@@ -6,6 +6,9 @@ import { Component, Input } from '@angular/core';
   templateUrl: './loading-overlay.component.html',
   styleUrl: './loading-overlay.component.scss'
 })
+/**
+ * Shows a loading overlay when visible is true.
+ */
 export class LoadingOverlayComponent {
-@Input() visible = false;
+  @Input() visible = false;
 }

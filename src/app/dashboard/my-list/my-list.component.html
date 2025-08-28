@@ -1,6 +1,6 @@
 <div class="favorite-wrapper">
     <div class="header">
-        <h2>Deine Favoriten-Liste</h2>
+        <h2>{{"Your favorites list" | translate }}</h2>
         @if (this.favoriteService.loading()) {
         <app-spinner-little></app-spinner-little>
         }
@@ -11,9 +11,9 @@
         }
         @empty {
         @if(this.favoriteService.error()){
-        <p class="error">Es ist ein unerwarteter Fehler passiert!</p>
+        <p class="error">{{"An unexpected error occurred!" | translate }}</p>
         }@else {
-        <p>Deine Liste ist aktuell noch leer“</p>
+        <p>{{"Your list is still empty" | translate }}</p>
         }
         }
     </div>

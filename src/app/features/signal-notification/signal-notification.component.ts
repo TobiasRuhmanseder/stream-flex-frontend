@@ -21,11 +21,17 @@ import { CommonModule } from '@angular/common';
     ]),
   ],
 })
+
+/**
+ * This component shows global notifications with fade animations
+ * and automatically hides them after a short time.
+ */
 export class SignalNotificationComponent {
-
-
   globalNotification = this.notificationService.globalNotification;
 
+  /**
+   * Sets up an effect to automatically clear the notification after 4 seconds.
+   */
   constructor(private notificationService: NotificationSignalsService) {
     effect(() => {
       if (this.globalNotification()) {

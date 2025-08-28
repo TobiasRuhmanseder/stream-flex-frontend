@@ -1,6 +1,6 @@
 <div class="search-wrapper">
     <div class="header">
-        <h2>Suchergebnisse</h2>
+        <h2>{{'Search results'| translate}}</h2>
         @if (searchService.loading()) {
         <app-spinner-little></app-spinner-little>
         }
@@ -13,7 +13,7 @@
         @if(searchService.error()){
         <p class="error">{{ searchService.error() }}</p>
         }@else {
-        <p>Keine Treffer für „{{ searchService.query() }}“</p>
+        <p>{{'No results for '| translate}}"{{ searchService.query() }}"</p>
         }
         }
     </div>

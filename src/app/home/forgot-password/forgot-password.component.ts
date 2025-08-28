@@ -8,18 +8,24 @@ import { NotificationSignalsService } from 'src/app/services/notification-signal
 import { EMPTY, catchError, switchMap } from 'rxjs';
 import { RecaptchaService } from 'src/app/services/recaptcha.service';
 import { PasswordResetRequest } from 'src/app/models/user.interfaces';
+import { TranslatePipe } from 'src/app/i18n/translate.pipe';
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SignInputComponent],
+  imports: [CommonModule, ReactiveFormsModule, SignInputComponent, TranslatePipe],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.scss'
 })
+
+/**
+ * Component for handling the forgot password functionality.
+ * Provides a form for users to request a password reset email.
+ */
 export class ForgotPasswordComponent {
   form: FormGroup;
 
-  // Constructor-based DI (statt inject())
+
   constructor(private fb: FormBuilder, private authService: AuthService, private notifyService: NotificationSignalsService,
     private router: Router, private recaptchaService: RecaptchaService) {
     this.form = this.fb.group({
@@ -29,6 +35,11 @@ export class ForgotPasswordComponent {
 
   get emailControl(): FormControl { return this.form.get('email') as FormControl; }
 
+  /**
+   * Handles the submission of the forgot password form.
+   * Validates the form, requests a recaptcha token, and sends a password reset request.
+   * Shows a notification and navigates to home on completion.
+   */
   submit() {
     if (this.form.invalid) return;
     const email = this.emailControl.value as string;
@@ -50,6 +61,9 @@ export class ForgotPasswordComponent {
     });
   }
 
+  /**
+   * Resets the email field and marks the form as pristine and untouched.
+   */
   emptyFields() {
     this.emailControl.reset('', { emitEvent: false });
     this.form.markAsPristine();

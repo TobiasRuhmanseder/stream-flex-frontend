@@ -1,40 +1,41 @@
 @if (success()) {
 <h3 class="info-text">
-    <h1>Verifizierung von {{email()}} erfolgreich!</h1>
-    <p>Sie können sich jetzt einloggen.</p>
+    <h1>{{'Verification of'| translate}} {{email()}} {{' successful!'| translate}}</h1>
+    <p>{{'You can log in now.'| translate}}</p>
     <br>
     <a class="link" [routerLink]="['/home/sign-in']" [queryParams]="{ email: email() }">
-        Zur Loginseite hier klicken
+        {{'Click here to go to the login page'| translate}}
     </a>
 </h3>
 }
 @else if (resend()){
 <h3 class="info-text">
-    <h1>Das erneute senden der Verifikations war erfolgreich!</h1>
-    <p>Sehen sie in ihrem E-Mail Postfach nach.</p>
+    <h1>{{'Resending the verification was successful!'| translate}}</h1>
+    <p>{{'Please check your email inbox'| translate}}</p>
     <br>
-    <a class="link" (click)="resendVerification()" >
-        Neue Verifizierungs-E-Mail anfordern
+    <a class="link" (click)="resendVerification()">
+        {{'Get a new verification mail'| translate}}
     </a>
 </h3>
 }
 @else if (notActivated()){
 <h3 class="info-text">
-    <h1>Deine E-Mail Adresse muss noch verifiziert werden.</h1>
-    <p>Sehen sie in ihrem E-Mail Postfach nach oder fordern sie erneut eine Verifizierung an.</p>
+    <h1>{{'
+        Your email address still needs to be verified.' | translate}}</h1>
+    <p>{{'Check your email inbox or request verification again.' | translate}}</p>
     <br>
     <a class="link" (click)="resendVerification()">
-        Neue Verifizierungs-E-Mail anfordern
+        {{'Get a new verification mail'| translate}}
     </a>
 </h3>
 }
 @else {
 <h3 class="info-text">
-    <h1>Etwas ist schief gelaufen!</h1>
-    <p>Der Verifizierungslink ist ungültig oder abgelaufen.</p>
+    <h1>{{'Something went wrong'| translate}}</h1>
+    <p>{{'The verification link is invalid or expired.' | translate}}</p>
     <br>
     <a class="link" (click)="resendVerification()">
-        Neue Verifizierungs-E-Mail anfordern
+        {{'Get a new verification mail'| translate}}
     </a>
 </h3>
 }

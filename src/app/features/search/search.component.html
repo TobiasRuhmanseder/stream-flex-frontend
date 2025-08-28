@@ -3,7 +3,7 @@
         <img src="assets/icons/lupe.svg" alt="lupe symbol" />
     </button>
     <div class="search-form">
-        <input #inputEl id="header-search" type="text" (input)="onInput($event)" placeholder="titel, genres"
+        <input #inputEl id="header-search" type="text" (input)="onInput($event)" placeholder="Titel, Genres"
             autocomplete="off" aria-label="search" />
         @if(cleanIcon()){
         <button type="button" class="clear-btn" aria-label="clear search" (mousedown)="$event.preventDefault()"

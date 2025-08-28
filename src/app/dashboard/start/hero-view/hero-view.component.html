@@ -13,11 +13,11 @@
         <img class="img-logo" [src]="currentHero()?.logo" alt="movie logo">
         <button class="bttn-white bttn-width mr-1rem" type="button" [routerLink]="['/player', currentHero()?.id]">
             <img src="assets/icons/play.svg" alt="">
-            Abspielen
+            {{'Play'| translate}}
         </button>
         <button class="bttn-grey bttn-width" type="button" (click)="openOverlayMovieInfo()">
-            <img src="assets/icons/info.svg" alt="">
-            Weitere Infos
+            <img src="assets/icons/info.svg" alt="open to more Info">
+            {{'More Infos'| translate}}
         </button>
     </div>
 </div>

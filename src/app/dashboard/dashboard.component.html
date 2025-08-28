@@ -1,8 +1,8 @@
 <div class="dashboard">
     <app-header-menu></app-header-menu>
-    <div [@routeTransition]="getState(outlet)">
+    <main [@routeTransition]="getState(outlet)">
         <router-outlet #outlet="outlet"></router-outlet>
-    </div>
+    </main>
     <footer>
         <app-footer></app-footer>
     </footer>

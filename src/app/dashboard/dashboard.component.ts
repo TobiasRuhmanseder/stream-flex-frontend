@@ -32,8 +32,16 @@ import { FooterComponent } from "../footer/footer.component";
   ],
 })
 
+/**
+ * DashboardComponent is the main component for the dashboard page.
+ * It handles route transitions and holds the main layout.
+ */
 export class DashboardComponent {
 
+  /**
+   * Gets the animation state from the router outlet.
+   * Used for page transition animations.
+   */
   getState(outlet: RouterOutlet) {
     return outlet?.activatedRouteData?.['animation'] ?? 'start';
   }

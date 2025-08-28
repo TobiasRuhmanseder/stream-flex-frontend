@@ -5,13 +5,22 @@ import { NotificationSignalsService } from '../services/notification-signals.ser
 import { AuthService } from '../services/auth.service';
 import { SKIP_AUTH_REFRESH, SILENT_AUTH_CHECK } from './http-context.tokens';
 
+
+/**
+ * Global HTTP interceptor to handle errors like network issues, validation errors, expired sessions, and more.
+ * - Shows notifications for different error types (e.g., offline, validation, session expired).
+ * - Handles session expiration by trying to refresh and retrying requests after refresh.
+ * - Supports silent mode to suppress notifications for some requests.
+ */
 export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
   const notifyService = inject(NotificationSignalsService);
   const authService = inject(AuthService);
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      const silent = req.context.get(SILENT_AUTH_CHECK) === true; // silent auth check: prevent toast/console on unauthenticated /me
+      // silent auth check: prevent toast/console on unauthenticated /me
+      const silent = req.context.get(SILENT_AUTH_CHECK) === true;
+
       // 0 = Network error / CORS / aborted
       if (error.status === 0) {
         if (silent) return EMPTY;

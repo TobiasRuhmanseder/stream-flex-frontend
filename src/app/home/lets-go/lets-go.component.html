@@ -1,24 +1,22 @@
 <div class="greeting">
-    <h1>Unbegrenzt Filme, Serien und mehr</h1>
-    <h2>Genießen Sie Stream Flex, wo immer Sie möchten. Jederzeit!</h2>
-    <span>Startklar? Geben Sie Ihre E-Mail Adresse ein, um Ihre kostenlose Mitgliedschaft zu beginnen!</span>
+    <h1>{{'Unlimited movies, series and more' | translate}}</h1>
+    <h2>{{'Enjoy Stream Flex wherever you want. Anytime!' | translate}}</h2>
+    <span>{{'Ready to get started? Enter your email address to begin your free membership!' | translate}}</span>
     <div class="d-flex align-center justify-center">
         <div class="input-section">
-            <app-sign-input [control]="emailControl" label="E-Mail-Adresse" type="email" [errorMessages]="{
-                    required: 'Dieses Feld ist erforderlich.',
-                    email: 'Bitte geben Sie eine gültige E-Mail-Adresse ein.'
-                  }">
+            <app-sign-input [control]="emailControl" [label]="'E-Mail address' | translate" type="email"
+                [errorMessages]="{
+                    required:('This field is required.' | translate),
+                    email: ('Please enter a valid email address.' | translate) }">
             </app-sign-input>
         </div>
-        <button (click)="letsGo()" class="bttn-red bttn-start" type="button">Loslegen
+        <button (click)="letsGo()" class="bttn-red bttn-start" type="button">{{"Let's Go" | translate}}
             <div class="start-arrow">
                 <img src="assets/icons/arror_forward_start.svg" alt="">
             </div>
         </button>
-
     </div>
-    <p class="recapcha-text">Diese Seite ist durch Google reCAPTCHA abgesichert, um sicherzustellen, dass Sie kein Bot
-        sind.<br>
-        Für weitere Infos, siehe rechts unten!
+    <p class="recapcha-text">{{"This site is secured by Google reCAPTCHA to ensure you are not a bot." | translate}}<br>
+        {{"For more information, see bottom right!" | translate}}
     </p>
 </div>
