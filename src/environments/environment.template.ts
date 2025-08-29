@@ -1,7 +1,7 @@
 export const environment = {
     production: false,
     recaptchaEnabled: false,
-    recaptchaSiteKey: '',
+    recaptchaSiteKey: 'YOUR SITE KEY',
     apiBaseUrl: 'API_BASE_URL',
     API_PREFIXES: [
         '/api',                        // Dev-Proxy / Reverse-Proxy
