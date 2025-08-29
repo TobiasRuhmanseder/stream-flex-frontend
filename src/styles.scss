@@ -11,12 +11,12 @@ body::-webkit-scrollbar {
     /* Chrome, Safari */
 }
 
-.grecaptcha-badge{
+.grecaptcha-badge {
     margin-bottom: 6rem;
 }
 
 html {
-    font-size: 100%;
+    font-size: 16px;
 }
 
 h1 {
@@ -202,4 +202,29 @@ h2 {
         border-color: #bbb;
         /* leicht helleres Grau beim Darüberfahren */
     }
+}
+
+@media screen and (max-width:1024px) {
+
+    /* Zusätzliche Regeln für kleinere Monitore  */
+   html{
+    font-size: 75%;
+   }
+}
+
+@media screen and (max-width:800px) {
+
+    /* Zusätzliche Regeln für kleinere Monitore  */
+   html{
+    font-size: 65%;
+   }
+}
+
+
+@media screen and (max-width:500px) {
+
+    /* Zusätzliche Regeln für kleinere Monitore  */
+   html{
+    font-size: 45%;
+   }
 }

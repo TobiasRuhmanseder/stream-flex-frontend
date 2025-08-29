@@ -3,8 +3,8 @@
 
     .overlay {
         position: absolute;
-        bottom: 10rem;
-        padding: 10rem;
+        bottom: 8rem;
+        padding: 8rem;
     }
 
     &::after {
@@ -48,4 +48,11 @@
     display: block;
     width: 15vw !important;
     margin-bottom: 3rem;
+}
+
+@media screen and (max-width:500px) {
+
+    .hero-view {
+        display: none;
+    }
 }

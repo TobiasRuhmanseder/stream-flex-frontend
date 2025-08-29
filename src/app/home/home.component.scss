@@ -10,8 +10,10 @@
 
 main {
     flex: 1;
-    position: relative;
-    margin-top: 15rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 7rem;
     display: flex;
     justify-content: center;
 }

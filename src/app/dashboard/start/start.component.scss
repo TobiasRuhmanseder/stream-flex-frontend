@@ -33,8 +33,33 @@
     }
 }
 
-.hero-wrap { margin-bottom: 1.2rem; }
-.hero-fader { opacity: 1; transition: opacity 350ms ease; }
-.hero-fader.is-fading { opacity: 0; }
+.hero-wrap {
+    margin-bottom: 1.2rem;
+}
 
-.rows { display: grid; gap: 1.2rem; }
+.hero-fader {
+    opacity: 1;
+    transition: opacity 350ms ease;
+}
+
+.hero-fader.is-fading {
+    opacity: 0;
+}
+
+.rows {
+    display: grid;
+    gap: 1.2rem;
+}
+
+
+
+
+@media screen and (max-width:500px) {
+
+    .hero-fader {
+
+        margin-bottom: 8rem;
+
+    }
+
+}
