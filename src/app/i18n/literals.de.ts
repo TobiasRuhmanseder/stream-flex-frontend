@@ -37,7 +37,7 @@ export const LITERALS_DE: Record<string, string> = {
 
     //sign up / sign in / forgot-password / reset-password /
     "Password": "Passwort",
-    "Reapeat password": "Passwort bestätigen",
+    "Repeat password": "Passwort bestätigen",
     "The password must be at least 8 characters long.": "Das Passwort muss mindestens 8 Zeichen lang sein.",
     "The password may be a maximum of 60 characters long.": "Das Passwort darf maximal 60 Zeichen lang sein.",
     "The password must contain at least one uppercase letter, one lowercase letter, one number and one special character.": "Das Passwort muss mindestens einen Großbuchstaben, einen Kleinbuchstaben, eine Zahl und ein Sonderzeichen enthalten.",
