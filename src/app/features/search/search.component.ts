@@ -1,10 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { Route, Router } from '@angular/router';
+import { TranslatePipe } from 'src/app/i18n/translate.pipe';
 import { SearchService } from 'src/app/services/search.service';
 
 @Component({
   selector: 'app-search',
-  imports: [],
+  imports: [TranslatePipe],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss'
 })

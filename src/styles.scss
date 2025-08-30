@@ -1,3 +1,7 @@
+.overflow-hidden-probl-mobile-devices {
+    overflow-x: hidden;
+}
+
 body {
     margin: 0;
     color: white;
@@ -207,24 +211,24 @@ h2 {
 @media screen and (max-width:1024px) {
 
     /* Zusätzliche Regeln für kleinere Monitore  */
-   html{
-    font-size: 75%;
-   }
+    html {
+        font-size: 75%;
+    }
 }
 
 @media screen and (max-width:800px) {
 
     /* Zusätzliche Regeln für kleinere Monitore  */
-   html{
-    font-size: 65%;
-   }
+    html {
+        font-size: 65%;
+    }
 }
 
 
 @media screen and (max-width:500px) {
 
     /* Zusätzliche Regeln für kleinere Monitore  */
-   html{
-    font-size: 45%;
-   }
+    html {
+        font-size: 45%;
+    }
 }

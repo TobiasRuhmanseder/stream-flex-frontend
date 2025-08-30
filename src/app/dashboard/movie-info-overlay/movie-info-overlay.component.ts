@@ -3,12 +3,12 @@ import { animate, style, transition, trigger, AnimationEvent } from '@angular/an
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Movie } from 'src/app/models/movie.interface';
 import { TranslatePipe } from 'src/app/i18n/translate.pipe';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-movie-info-overlay',
   standalone: true,
-  imports: [TranslatePipe, RouterLink],
+  imports: [TranslatePipe],
   templateUrl: './movie-info-overlay.component.html',
   styleUrl: './movie-info-overlay.component.scss',
   animations: [
@@ -36,6 +36,7 @@ export class MovieInfoOverlayComponent implements AfterViewInit {
     @Inject(DIALOG_DATA) public movie: Movie,
     private ref: DialogRef<MovieInfoOverlayComponent>,
     private cdr: ChangeDetectorRef,
+    private router: Router,
   ) { }
 
   /**
@@ -63,5 +64,15 @@ export class MovieInfoOverlayComponent implements AfterViewInit {
     if ((ev as any).toState === 'void') {
       this.ref.close();
     }
+  }
+
+  /**
+   * Route to the player
+   * @param id movie id 
+   */
+  playAndCloseWindow(id: number) {
+    this.router.navigate(['/player', id]);
+    this.close();
+
   }
 }

@@ -68,4 +68,6 @@ export const LITERALS_DE: Record<string, string> = {
     "Your email address still needs to be verified.":"Deine E-Mail Adresse muss noch verifiziert werden.",
     "Check your email inbox or request verification again.":"Sehen sie in ihrem E-Mail Postfach nach oder fordern sie erneut eine Verifizierung an.",
     
+    //sign-up success / verify-email
+    "Title, Description":"Titel, Beschreibung"
 };
