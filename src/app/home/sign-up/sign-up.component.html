@@ -15,7 +15,7 @@
                 pattern: ('The password must contain at least one uppercase letter, one lowercase letter, one number and one special character.'| translate),
                 }">
             </app-sign-input>
-            <app-sign-input [control]="confirmPasswordControl" label="{{'Password' | translate}}" type="password"
+            <app-sign-input [control]="confirmPasswordControl" label="{{'Repeat password' | translate}}" type="password"
                 [errorMessages]="{
                     required: ('Please repeat your password'| translate),
                     passwordMismatch: ('The passwords do not match.'| translate),
