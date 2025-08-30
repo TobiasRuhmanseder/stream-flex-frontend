@@ -3,11 +3,12 @@ import { animate, style, transition, trigger, AnimationEvent } from '@angular/an
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Movie } from 'src/app/models/movie.interface';
 import { TranslatePipe } from 'src/app/i18n/translate.pipe';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-movie-info-overlay',
   standalone: true,
-  imports: [TranslatePipe],
+  imports: [TranslatePipe, RouterLink],
   templateUrl: './movie-info-overlay.component.html',
   styleUrl: './movie-info-overlay.component.scss',
   animations: [
@@ -62,13 +63,5 @@ export class MovieInfoOverlayComponent implements AfterViewInit {
     if ((ev as any).toState === 'void') {
       this.ref.close();
     }
-  }
-
-  /**
-   * Called when the user wants to play the movie.
-   * (Currently not implemented.)
-   */
-  playMovie() {
-
   }
 }

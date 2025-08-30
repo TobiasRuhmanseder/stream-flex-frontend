@@ -16,7 +16,7 @@ function initializeApp(): void | Promise<void> {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(withInterceptors([apiPrefixInterceptor,loadingInterceptor, httpErrorInterceptor, csrfInterceptor,])
+    provideHttpClient(withInterceptors([apiPrefixInterceptor,loadingInterceptor, httpErrorInterceptor, csrfInterceptor])
       , withXsrfConfiguration({
         cookieName: 'csrftoken',
         headerName: 'X-CSRFToken',
