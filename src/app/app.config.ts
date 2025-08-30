@@ -7,6 +7,7 @@ import { provideHttpClient, withInterceptors, withXsrfConfiguration } from '@ang
 import { httpErrorInterceptor } from './interceptor/http-error.interceptor';
 import { loadingInterceptor } from './interceptor/loading-interceptor';
 import { csrfInterceptor } from './interceptor/csrf.interceptor';
+import { apiPrefixInterceptor } from './interceptor/api-prefix.interceptor';
 
 
 function initializeApp(): void | Promise<void> {
@@ -15,7 +16,7 @@ function initializeApp(): void | Promise<void> {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(withInterceptors([csrfInterceptor, loadingInterceptor, httpErrorInterceptor])
+    provideHttpClient(withInterceptors([apiPrefixInterceptor,loadingInterceptor, httpErrorInterceptor, csrfInterceptor,])
       , withXsrfConfiguration({
         cookieName: 'csrftoken',
         headerName: 'X-CSRFToken',
