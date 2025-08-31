@@ -115,7 +115,7 @@ export class StartComponent implements OnInit {
   }
 
   /**
-   * Sets the current hero by index and ensures fresh authentication access.
+   * Sets the current hero by index.
    * @param i Index of the hero to apply.
    */
   applyHero(i: number) {
@@ -124,7 +124,6 @@ export class StartComponent implements OnInit {
     this.idx.set(i);
     const hero = arr[i % arr.length];
     const id = hero.id as number;
-    this.authService.ensureFreshAccessWithoutLoadingIntcr().subscribe(() => { });
   }
 
   /**

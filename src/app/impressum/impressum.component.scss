@@ -1,12 +1,26 @@
 .impressum {
-    background-color: black;
     display: flex;
+    align-items: center;
+    background-color: black;
     flex-direction: column;
+    width: 100vw;
     min-height: 100dvh;
+
 }
 
-main {
+header{
+    width: 100vw;
+}
+
+.main-wrapper {
+    width: 100vw;
     padding-top: 10rem;
-    text-align: center;
+    display: flex;
+    justify-content: start;
     flex: 1;
+    max-width: calc(1980px - 12rem);
+}
+
+footer{
+    width: 100vw;
 }

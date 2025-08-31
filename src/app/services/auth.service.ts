@@ -100,7 +100,6 @@ export class AuthService {
     const maybeMe$ = this.maybeLoggedIn()
       ? this.http.get<User>(this.geMeUrl, { withCredentials: true, context: silentCtx }).pipe(
         tap(user => this._user.set(user)),
-        catchError(() => of(null)),
         map(() => void 0)
       )
       : of(void 0);
@@ -139,19 +138,7 @@ export class AuthService {
     );
   }
 
-  /**
-   * Ensures session is fresh without triggering loading interceptor.
-   * Used to silently check access.
-   */
-  ensureFreshAccessWithoutLoadingIntcr(): Observable<void> {
-    const ctx = new HttpContext().set(SKIP_LOADING_INTCR, true);
 
-    return this.http.get(this.geMeUrl, { withCredentials: true, context: ctx })
-      .pipe(
-        map(() => undefined),
-        catchError(() => of(undefined))
-      );
-  }
   /**
    * Logs out the user on the server and clears local user state.
    * Reloads the page. Used by interceptors.
@@ -162,6 +149,8 @@ export class AuthService {
     this.http.post(this.signOutUrl, {}, { withCredentials: true, context }).subscribe({
       next: () => { },
       error: () => {
+        this._user.set(null);
+        window.location.reload();
       },
       complete: () => {
         this._user.set(null);

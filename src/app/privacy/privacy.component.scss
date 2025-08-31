@@ -1,14 +1,25 @@
 .privacy {
     background-color: black;
     display: flex;
+    align-items: center;
     flex-direction: column;
     min-height: 100dvh;
 }
 
-main {
-    padding-top: 7rem;
-    padding-left: 6rem;
-    padding-right: 6rem;
+header {
+    width: 100vw;
+}
 
+.main-wrapper {
+    width: 100vw;
+    padding-top: 10rem;
+    padding-bottom: 10rem;
+    display: flex;
+    justify-content: start;
     flex: 1;
+    max-width: calc(1980px - 12rem);
+}
+
+footer {
+    width: 100vw;
 }

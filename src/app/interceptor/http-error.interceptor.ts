@@ -1,15 +1,16 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { catchError, switchMap, throwError, EMPTY } from 'rxjs';
+import { catchError, throwError, EMPTY } from 'rxjs';
 import { NotificationSignalsService } from '../services/notification-signals.service';
 import { AuthService } from '../services/auth.service';
-import { SKIP_AUTH_REFRESH, SILENT_AUTH_CHECK } from './http-context.tokens';
+import { SILENT_AUTH_CHECK } from './http-context.tokens';
 
 
 /**
  * Global HTTP interceptor to handle errors like network issues, validation errors, expired sessions, and more.
  * - Shows notifications for different error types (e.g., offline, validation, session expired).
- * - Handles session expiration by trying to refresh and retrying requests after refresh.
+ * - Backend middleware handles token refresh automatically.
+ * - If a 401 Unauthorized is received, it means the session is expired and user is signed out.
  * - Supports silent mode to suppress notifications for some requests.
  */
 export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
@@ -48,32 +49,13 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
         notifyService.showKey('http.badRequest');
         return throwError(() => error);
       }
-      // 401: Access expired - try refresh (cookie-based). If success, repeat original request.
+      // 401: Backend middleware handles auto-refresh. If we still get 401, treat as signed-out.
       if (error.status === 401) {
-        // Skip refresh flow for explicitly marked requests (e.g., sign-in, refresh itself)
-        if (req.context.get(SKIP_AUTH_REFRESH)) {
-          return silent ? EMPTY : throwError(() => error);
-        }
-        return authService.refreshJwtToken().pipe(
-          switchMap((ok) => {
-            if (ok) {
-              // Cookie refreshed - simply retry the original request
-              return next(req);
-            }
-            // no refresh possible - optionally logout + toast (not in silent mode)
-            authService.signOut();
-            if (silent) return EMPTY;
-            notifyService.showKey('auth.sessionExpired');
-            return throwError(() => error);
-          }),
-          catchError((refreshErr) => {
-            if (silent) return EMPTY;
-            // refresh failure
-            authService.signOut();
-            notifyService.showKey('auth.refreshFailed');
-            return throwError(() => refreshErr);
-          })
-        );
+        // Backend middleware handles auto-refresh. If we still get 401, treat as signed-out.
+        authService.signOut();
+        if (silent) return EMPTY;
+        notifyService.showKey('auth.sessionExpired');
+        return throwError(() => error);
       }
       // 403: Let components handle domain-specific messages (e.g., account not activated)
       if (error.status === 403) {
