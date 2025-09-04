@@ -1,28 +1,99 @@
-# StreamFlexFrontend
+# Streamflex Frontend (Angular 19)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 19.2.11
+Single-Page-App für den kleinen Netflix-Clone.  
+Ziele: moderne Angular-Patterns (**Signals**, optional **Zoneless**), sauberes Dev-Setup (Proxy), klare Prod-Builds.
 
-## Development server
+![Angular](https://img.shields.io/badge/angular-19-red)
+![Build](https://img.shields.io/badge/build-ready-brightgreen)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+---
 
-## Code scaffolding
+## Table of Contents
+- [Voraussetzungen](#voraussetzungen)
+- [Umgebungen / Environment](#umgebungen--environment)
+- [Dev-Start (mit Proxy)](#dev-start-mit-proxy)
+- [CSRF & Auth (JWT + Cookies)](#csrf--auth-jwt--cookies)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+---
 
-## Build
+## Voraussetzungen
+- Node.js 
+- npm
+- Angular CLI (`npm i -g @angular/cli`)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+---
 
-## Running unit tests
+## Umgebungen / Environment
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+`src/environments/environment.template.ts` 
 
-## Further help
+DEV:
+In Dev gehen Requests relativ über /api und werden vom Angular-Proxy an das Backend (z. B. http://localhost:8000) weitergereicht.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
-# stream-flex-frontend
+```ts
+export const environment = {
+  production: false,
+  recaptchaEnabled: false,
+  recaptchaSiteKey: 'YOUR SITE KEY',
+  // Für Dev lassen wir die API via Proxy laufen (siehe proxy.conf & start.sh):
+  apiBaseUrl: '/api',
+};
+```
+
+PROD:
+
+In Prod direkt auf die öffentliche API zeigen.
+
+```ts
+export const environment = {
+  production: true,
+  recaptchaEnabled: true,
+  recaptchaSiteKey: 'YOUR SITE KEY',
+  apiBaseUrl: 'https://api.streamflex.tobias-ruhmanseder.de/api',
+};
+```
+
+## Dev-Start
+
+`proxy.conf.json (Beispiel)`
+```ts
+{
+  "/api": {
+    "target": "http://localhost:8000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}
+```
+
+Start:
+```ts
+source start.sh
+```
+
+Wichtig: In Dev muss environment.apiBaseUrl = "/api" sein, damit die Requests den Proxy benutzen. In Prod ist es die absolute API-URL.
+
+
+## CSRF & Auth (JWT + Cookies)
+
+Das Backend arbeitet mit HttpOnly Cookies für Access/Refresh + CSRF.
+
+### FRONTEND-SEITE:
+   - alle API-Requests, die Cookies mitschicken, benötigen `withCredentials: true`
+
+### DEV (Proxy):
+  - durch den Proxy (/api -> http://localhost:8000) verhält es sich wie same-origin → CORS ist simpel.
+
+### PROD:
+  - environment.apiBaseUrl auf die echte API-Domain setzen
+  - Cookies/CSRF-Domain im Backend korrekt konfigurieren
+
+
+
+
+
+
+
