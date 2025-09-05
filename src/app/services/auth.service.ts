@@ -1,10 +1,10 @@
 import { Injectable, signal } from '@angular/core';
 import { CheckEmailResponse, SignUpRequest, CheckEmailRequest, SignUpResponse, User, SignInRequest, SignInResponse, PasswordResetConfirmRequest, PasswordResetRequest } from '../models/user.interfaces';
-import { catchError, lastValueFrom, map, mapTo, Observable, of, switchMap, tap } from 'rxjs';
+import { catchError, lastValueFrom, map, mapTo, Observable, of, switchMap, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { HttpContext } from '@angular/common/http';
-import { SKIP_AUTH_REFRESH, SILENT_AUTH_CHECK, SKIP_LOADING_INTCR } from '../interceptor/http-context.tokens';
+import { SKIP_LOGOUT, SILENT_AUTH_CHECK, SKIP_LOADING_INTCR } from '../interceptor/http-context.tokens';
 
 const STORAGE_KEY = 'sf_maybeLoggedIn';
 
@@ -100,9 +100,18 @@ export class AuthService {
     const maybeMe$ = this.maybeLoggedIn()
       ? this.http.get<User>(this.geMeUrl, { withCredentials: true, context: silentCtx }).pipe(
         tap(user => this._user.set(user)),
-        map(() => void 0)
+        map(() => void 0),
+        catchError(() => {
+          console.log('deleted');
+          
+          this._user.set(null);
+          this.maybeLoggedIn.set(false);
+          try { localStorage.removeItem(STORAGE_KEY); } catch { }
+          return of(void 0);
+        })
       )
       : of(void 0);
+
     const init$ = csrf$.pipe(switchMap(() => maybeMe$));
     return lastValueFrom(init$);
   }
@@ -131,9 +140,9 @@ export class AuthService {
    * Sets user state and marks as logged in.
    */
   signIn(data: SignInRequest): Observable<SignInResponse> {
-    const ctx = new HttpContext().set(SKIP_AUTH_REFRESH, true);
+    const ctx = new HttpContext().set(SKIP_LOGOUT, true);
 
-    return this.http.post<SignInResponse>(this.signInUrl, data, { withCredentials: true, context: new HttpContext().set(SKIP_LOADING_INTCR, true) }).pipe(
+    return this.http.post<SignInResponse>(this.signInUrl, data, { withCredentials: true, context: ctx }).pipe(
       tap(res => { this._user.set(res.user); this.markLoggedInHint(); })
     );
   }
@@ -145,8 +154,8 @@ export class AuthService {
    */
   signOut(): void {
     this.clearLoggedInHint();
-    const context = new HttpContext().set(SKIP_AUTH_REFRESH, true);
-    this.http.post(this.signOutUrl, {}, { withCredentials: true, context }).subscribe({
+    const ctx = new HttpContext().set(SKIP_LOGOUT, true);
+    this.http.post(this.signOutUrl, {}, { withCredentials: true, context: ctx }).subscribe({
       next: () => { },
       error: () => {
         this._user.set(null);
@@ -187,19 +196,6 @@ export class AuthService {
    */
   passwordResetConfirm(data: PasswordResetConfirmRequest) {
     return this.http.post<void>(this.passwordResetConfirmUrl, data, { withCredentials: true });
-  }
-
-  /**
-   * Tries to refresh the access token using HttpOnly cookies.
-   * Returns true on success, false on failure.
-   */
-  refreshJwtToken(): Observable<boolean> {
-    const ctx = new HttpContext().set(SKIP_AUTH_REFRESH, true);
-
-    return this.http.post(this.tokenRefreshUrl, {}, { withCredentials: true, context: ctx }).pipe(
-      map(() => true),
-      catchError(() => of(false))
-    );
   }
 
   /**

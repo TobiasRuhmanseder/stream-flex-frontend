@@ -45,6 +45,14 @@ export class SearchComponent {
     }
   }
 
+  onBlur(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    if (value === ""){
+      this.router.navigate(['dashboard/start'], { queryParams: { q: value } });
+      this.toggleSearch();
+    }
+  }
+
   /**
    * Handles input events on the search field.
    * Updates the URL with the current query and sets the query in the search service.

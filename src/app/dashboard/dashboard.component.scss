@@ -4,6 +4,13 @@
     min-height: 100vh;
 }
 
-main{
-flex: 1;
+main {
+    flex: 1;
+}
+
+@media screen and (max-width:500px) {
+
+    .hero-fader {
+        display: none;
+    }
 }

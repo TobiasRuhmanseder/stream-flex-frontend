@@ -10,14 +10,18 @@ header {
     width: 100vw;
 }
 
-.main-wrapper {
+.main-wr {
     width: 100vw;
-    padding-top: 10rem;
-    padding-bottom: 10rem;
     display: flex;
     justify-content: start;
     flex: 1;
-    max-width: calc(1980px - 12rem);
+    max-width: 1980px
+}
+
+main {
+    padding: 10rem 6rem;
+    padding-top: 10rem;
+    padding-top: 10rem;
 }
 
 footer {

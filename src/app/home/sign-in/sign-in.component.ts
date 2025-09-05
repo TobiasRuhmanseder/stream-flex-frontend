@@ -85,7 +85,7 @@ export class SignInComponent implements OnInit {
       catchError(err => {
         if (err?.status === 401) {
           this.notifyService.showKey('auth.invalidCredentials', 'error');
-          return EMPTY;
+          return EMPTY
         }
         if (err?.status === 403) {
           this.notifyService.showKey('auth.accountNotActivated', 'error');
@@ -95,7 +95,9 @@ export class SignInComponent implements OnInit {
           return EMPTY;
         }
         this.notifyService.showKey('http.unexpected', 'error');
-        return EMPTY;
+        console.log(err);
+        
+        return err
       })
     ).subscribe(() => {
       const redirect = this.route.snapshot.queryParamMap.get('redirectTo') ?? '/dashboard';

@@ -1,4 +1,4 @@
-import { Component, signal, HostListener, inject, ElementRef, computed } from '@angular/core';
+import { Component, signal, HostListener, ElementRef, computed } from '@angular/core';
 import { LocaleService } from 'src/app/i18n/locale.service';
 
 @Component({
@@ -22,7 +22,7 @@ export class LanguageDropdownComponent {
     { code: 'en', label: 'English' },
   ]);
 
-  
+
   constructor(private localeService: LocaleService, private host: ElementRef) { }
 
   /**

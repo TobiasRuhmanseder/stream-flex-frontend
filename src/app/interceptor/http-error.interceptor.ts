@@ -2,8 +2,8 @@ import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError, EMPTY } from 'rxjs';
 import { NotificationSignalsService } from '../services/notification-signals.service';
-import { AuthService } from '../services/auth.service';
-import { SILENT_AUTH_CHECK } from './http-context.tokens';
+
+import { SILENT_AUTH_CHECK, SKIP_LOGOUT } from './http-context.tokens';
 
 
 /**
@@ -15,7 +15,8 @@ import { SILENT_AUTH_CHECK } from './http-context.tokens';
  */
 export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
   const notifyService = inject(NotificationSignalsService);
-  const authService = inject(AuthService);
+  const skipLogout = req.context.get(SKIP_LOGOUT) === true;
+  
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
@@ -50,10 +51,10 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
         return throwError(() => error);
       }
       // 401: Backend middleware handles auto-refresh. If we still get 401, treat as signed-out.
-      if (error.status === 401) {
+      if (error.status === 401 && !skipLogout) {
         // Backend middleware handles auto-refresh. If we still get 401, treat as signed-out.
-        authService.signOut();
-        if (silent) return EMPTY;
+        // authService.signOut();
+        if (silent) return throwError(() => error);
         notifyService.showKey('auth.sessionExpired');
         return throwError(() => error);
       }

@@ -16,6 +16,7 @@
         <li (click)="selectLanguage(language)" [class.selected]="language.code === selectedLanguage().code">
             @if (language.code === selectedLanguage().code) {
             <img class="language-icon" src="../../../assets/icons/check.svg" alt="selected" />
+            
             } @else {
             <img class="language-icon check-placeholder" src="../../../assets/icons/check.svg" alt="" />
             }
